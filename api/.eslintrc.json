@@ -1,0 +1,30 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "arrowFunctions": true,
+            "globalReturn": true,
+            "jsx": true
+        }
+    },
+    "env": {
+        "node": true
+    },
+    "rules": {
+        "semi": "error",
+        "eqeqeq": "error",
+        "curly": "error",
+        "quotes": ["error", "single"],
+        "indent": ["error", 4],
+        "no-unreachable": "error",
+        "no-unused-vars": "error",
+        "no-undef": "error",
+        "space-infix-ops": "error",
+        "arrow-parens": "error",
+        "prefer-arrow-callback": "error"
+    },
+    "globals": {
+        "Promise": false
+    }
+}
