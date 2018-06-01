@@ -11,10 +11,22 @@ services:
             DB_URL: $DB_URL
             JACKETS_TABLE: $JACKETS_TABLE
             USERS_TABLE: $USERS_TABLE
-            NODE_ENV: development
+            NODE_ENV: $NODE_ENV
         volumes:
             - /fossil-jackets-api/node_modules
             - ./api:/fossil-jackets-api
+
+    client:
+        build: ./client
+        container_name: fossil-jackets-client
+        depends_on:
+            - api
+        environment:
+            PORT: $CLIENT_PORT
+            NODE_ENV: $NODE_ENV
+        volumes:
+            - /fossil-jackets-client/node_modules
+            - ./client:/fossil-jackets-client
 
     db:
         image: postgres:10.4-alpine
