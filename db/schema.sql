@@ -34,7 +34,7 @@ create table jackets (
 );
 
 create table photos (
-    pid serial primary key,
+    pid serial4 primary key,
     jid int4 not null references jackets(jid),
     uri varchar(1024) not null,
     thumb varchar(1024) not null
