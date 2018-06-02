@@ -1,0 +1,20 @@
+# babel and other caches
+.babel.json
+.cache
+.config
+
+# expo
+.expo/
+
+# dependencies
+/node_modules
+
+# misc
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

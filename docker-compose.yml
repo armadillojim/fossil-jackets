@@ -14,6 +14,17 @@ services:
             - /fossil-jackets-api/node_modules
             - ./api:/fossil-jackets-api
 
+    app:
+        build: ./app
+        container_name: fossil-jackets-app
+        depends_on:
+            - api
+        environment:
+            NODE_ENV: $NODE_ENV
+        volumes:
+            - /fossil-jackets-app/node_modules
+            - ./app:/fossil-jackets-app
+
     client:
         build: ./client
         container_name: fossil-jackets-client
