@@ -10,7 +10,7 @@ create table users (
     email varchar(256) not null,
     issued int8 not null,
     revoked int8,
-    token char(24) not null
+    token char(16) not null
 );
 
 create table jackets (
