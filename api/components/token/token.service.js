@@ -35,7 +35,11 @@ module.exports = function(db) {
         return { uid: uid, token: tokenString };
     };
 
+    const userRevokeQuery = 'update users set revoked=$1 where email=$2 and revoked is null';
     const revokeUser = async (email) => {
+        const userRevokeResult = await db.query(userRevokeQuery, [Date.now(), email]);
+        // ignore the result, and simply return
+        return;
     };
 
     return {
