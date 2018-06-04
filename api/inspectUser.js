@@ -2,13 +2,13 @@
 
 const askQuestions = require('./lib/readlineAskQuestions.js');
 
-const initDb = require('./initDb.js')(console);
+const initDb = require('./lib/initDb.js')(console);
 initDb.then((db) => {
     const { inspectUser } = require('./components/token/token.service.js')(db);
     askQuestions(['Email'], async (answers) => {
         try {
             const user = await inspectUser(...answers);
-            const stringToDictionary = require('./tokenDictionary.js');
+            const stringToDictionary = require('./lib/tokenDictionary.js');
             console.log(`UID: ${user.uid}`);
             console.log(`Full name: ${user.fullname}`); // NB: capitalization b/c of postgres column name insensitivity
             console.log(`Email: ${user.email}`);

@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 // Create a logging facility
-const logger = require('./initLogger.js');
+const logger = require('./lib/initLogger.js');
 
 // Create a listener promise for the API web server
 const os = require('os');
@@ -18,7 +18,7 @@ const listen = new Promise(
 );
 
 // Create a database promise for a connection
-const initDb = require('./initDb.js')(logger);
+const initDb = require('./lib/initDb.js')(logger);
 
 // Start the listener and the database connection
 Promise.all([
