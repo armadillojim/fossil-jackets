@@ -1,23 +1,6 @@
 // Register a new user from the command line.
 
-const readline = require('readline');
-const readlineStd = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: true,
-});
-const askQuestions = (questions, finish, answers) => {
-    answers = answers || [];
-    if (questions.length) {
-        readlineStd.question(questions.shift() + '? ', (answer) => {
-            answers.push(answer);
-            askQuestions(questions, finish, answers);
-        });
-    } else {
-        readlineStd.close();
-        finish(answers);
-    }
-};
+const askQuestions = require('./lib/readlineAskQuestions.js');
 
 const initDb = require('./initDb.js')(console);
 initDb.then((db) => {
