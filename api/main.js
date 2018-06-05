@@ -27,7 +27,7 @@ Promise.all([
 ]).then(([_, db]) => {
 
     // Install all our middleware
-    const commonComponent = require('./components/common')(logger);
+    const commonComponent = require('./components/common')(logger, db);
     app.use(commonComponent);
     const jacketComponent = require('./components/jacket')(db);
     app.use('/jacket', jacketComponent);
