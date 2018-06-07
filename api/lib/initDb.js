@@ -10,8 +10,8 @@ const { Pool } = require('pg');
 
 const dbUrl = process.env.DB_URL;
 const awsRdsSsl = {
-  ca: fs.readFileSync('rds-combined-ca-bundle.pem', 'utf8'),
-  rejectUnauthorized: true,
+    ca: fs.readFileSync('rds-combined-ca-bundle.pem', 'utf8'),
+    rejectUnauthorized: true,
 };
 const poolConfig = {
     connectionString: dbUrl,
@@ -30,7 +30,7 @@ module.exports = function(logger) {
             .then((pgClient) => {
                 // install a listener to log uncaught error events
                 pgPool.on('error', (err) => {
-                    logger.error('api-db: something bad has happened! ' + JSON.stringify(err.stack, replacer, 4));
+                    logger.error('api-db: something bad has happened! ' + JSON.stringify(err.stack, null, 4));
                 });
                 // release the client, log the connection, et voila
                 pgClient.release();
@@ -38,7 +38,7 @@ module.exports = function(logger) {
                 resolve(pgPool);
             })
             .catch((err) => {
-                logger.error('api-db: connection error ' + JSON.stringify(err.stack, replacer, 4));
+                logger.error('api-db: connection error ' + JSON.stringify(err.stack, null, 4));
                 reject(err);
             });
     });

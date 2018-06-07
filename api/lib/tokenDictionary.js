@@ -7,7 +7,7 @@
 // integer number of octets.  Our "BigInt" is an array of integers, from least
 // significant to most significant.
 
-const bigBase = 2**32;
+const bigBase = 2 ** 32;
 const bigBaseOctets = 4;
 
 const words = require('./words.js');
@@ -16,10 +16,10 @@ const wordBase = words.length;
 // Use long division to compute divmod(BigInt, Number).
 const divmod = (x, d) => {
     const q = Array(x.length).fill(0);
-    for (var i = x.length-1, r = 0; i >= 0; i--) {
+    for (var i = x.length - 1, r = 0; i >= 0; i--) {
         r *= bigBase;
         r += x[i];
-        const rNext = r % d
+        const rNext = r % d;
         q[i] = (r - rNext) / d;
         r = rNext;
     }
@@ -39,16 +39,16 @@ const stringToBigInt = (s) => {
 };
 
 // Convert a string of bytes to dictionary words
-const stringLengthToDictionaryLength = 8.0*Math.log(2.0)/Math.log(wordBase);
+const stringLengthToDictionaryLength = 8.0 * Math.log(2.0) / Math.log(wordBase);
 const stringToDictionary = (s) => {
-    var b = stringToBigInt(s), w = [];
+    var b = stringToBigInt(s), w = [], r;
     const isZero = (x) => x === 0;
     while (!b.every(isZero)) {
         [b, r] = divmod(b, wordBase);
         w.push(words[r]);
     }
     const dictionaryLength = Math.ceil(s.length * stringLengthToDictionaryLength);
-    return w.concat(Array(dictionaryLength-w.length).fill(words[0]));
+    return w.concat(Array(dictionaryLength - w.length).fill(words[0]));
 };
 
 module.exports = stringToDictionary;

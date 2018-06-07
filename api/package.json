@@ -1,7 +1,7 @@
 {
   "name": "fossil-jackets-api",
   "scripts": {
-    "lint": "eslint ./components/**",
+    "lint": "eslint ./*.js ./components/** ./lib/**",
     "start": "node main.js",
     "start_dev": "pm2-dev main.js"
   },

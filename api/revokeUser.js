@@ -8,7 +8,7 @@ initDb.then((db) => {
     askQuestions(['Email'], async (answers) => {
         try {
             const [ email ] = answers;
-            const user = await revokeUser(email);
+            await revokeUser(email);
             console.log(`Revoked all tokens for ${email}`);
         } catch (err) {
             console.error(err);
