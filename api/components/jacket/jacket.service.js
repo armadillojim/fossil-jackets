@@ -32,13 +32,20 @@ module.exports = function(db) {
         return values;
     };
 
+    const jacketSelectQuery = `select ${jacketFieldsString} from jackets where jid=$1 and seeAlso is null`;
+    const getJacket = async (jid) => {
+        const jacketSelectResult = await db.query(jacketSelectQuery, [jid]);
+        if (!jacketSelectResult.rows.length) { return null; }
+        return jacketSelectResult.rows[0];
+    };
+
     const jacketInsertQuery = `insert into jackets (${jacketFieldsString}) values (${jacketValuesString}) returning jid`;
     const putJacket = async (jacket) => {
         // validate the signature
         const jhmac = jacket.jhmac;
         delete jacket.jhmac;
         const validSignature = await verifySignature(jacket, jhmac, jacket.uid);
-        if (!validSignature) { throw { status:400, message: 'Bad jacket signature' }; }
+        if (!validSignature) { return false; }
         // write the jacket
         const jacketInsertValues = jacketValues(jacket);
         jacketInsertValues[jacketFields.length - 1] = jhmac;
@@ -48,6 +55,7 @@ module.exports = function(db) {
     };
 
     return {
+        getJacket: getJacket,
         putJacket: putJacket,
     };
 
