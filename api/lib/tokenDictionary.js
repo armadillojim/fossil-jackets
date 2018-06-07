@@ -27,15 +27,21 @@ const divmod = (x, d) => {
 };
 
 // Convert a string of bytes to a BigInt.
-const stringToNumber = (s) => {
-    for (var i = Math.min(bigBaseOctets, s.length), n = 0; i > 0;) {
-        n *= 256;
-        n += s.charCodeAt(--i);
-    }
-    return n;
-};
 const stringToBigInt = (s) => {
-    return s.match(new RegExp(`.{1,${bigBaseOctets}}`, 'g')).map(stringToNumber);
+    const buffer = Buffer.from(s, 'binary'), bigInt = [];
+    var n = 0, m = 1, i = 0;
+    for (const d of buffer) {
+        n += d * m;
+        m *= 256;
+        i += 1;
+        if (i % bigBaseOctets === 0) {
+            bigInt.push(n);
+            n = 0;
+            m = 1;
+        }
+    };
+    if (n) { bigInt.push(n); }
+    return bigInt;
 };
 
 // Convert a string of bytes to dictionary words
