@@ -6,7 +6,7 @@
 // * https://stackoverflow.com/a/31102605
 function sortObject(unordered) {
     const ordered = {};
-    Object.keys(unordered).sort().forEach(function(key) {
+    Object.keys(unordered).sort().forEach((key) => {
         ordered[key] = unordered[key];
     });
     return ordered;
@@ -18,7 +18,7 @@ const TOKEN_KEY = process.env.TOKEN_KEY;
 module.exports = function(db) {
 
     const keyFromUidQuery = 'select token from users where uid=$1 and revoked is null';
-    const verifySignature = async (payload, hmacThem, uid) => {
+    const generateSignature = async (payload, uid) => {
         // sort the payload into a standard order, and JSONify it
         const payloadJSON = JSON.stringify(sortObject(payload));
         // get the user's token from the database
@@ -30,14 +30,19 @@ module.exports = function(db) {
         let token = tokenDecipher.update(tokenBase64, 'base64').toString('binary');
         token += tokenDecipher.final().toString('binary');
         // use the token as the key to compute the HMAC
-        const hmac = crypto.createHmac('sha256', token);
-        hmac.update(payloadJSON, 'utf8');
-        hmacUs = hmac.digest('base64');
-        // check we match their signature
+        const hmacSigner = crypto.createHmac('sha256', token);
+        hmacSigner.update(payloadJSON, 'utf8');
+        const hmac = hmacSigner.digest('base64');
+        return hmac;
+    };
+
+    const verifySignature = async (payload, hmacThem, uid) => {
+        const hmacUs = await generateSignature(payload, uid);
         return (hmacUs === hmacThem);
     };
 
     return {
+        generateSignature: generateSignature,
         verifySignature: verifySignature,
     };
 

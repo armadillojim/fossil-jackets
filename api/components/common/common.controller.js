@@ -7,11 +7,13 @@ module.exports = function(commonService) {
         // avoid replay: verify time within 60 seconds of now
         const timeSynchronized = Math.abs(Date.now() - query.time) < 60000;
         if (!timeSynchronized) { throw { status:400, message:'Bad request: check your clock' }; }
-        // aggregate in regular order all the variable data used to sign
+        // aggregate all the variable data used to sign
         const payload = { path:path, ...query, ...body };
+        payload.uid = Number(payload.uid);
+        payload.time = Number(payload.time);
         delete payload.hmac;
         // ask the service to verify the signature using the user's key
-        const validHmac = await commonService.verifySignature(payload, query.hmac, query.uid);
+        const validHmac = await commonService.verifySignature(payload, query.hmac, payload.uid);
         if (!validHmac) { throw { status:401, message:'Unauthorized' }; }
         // everything is OK: return nothingburger
         return;
