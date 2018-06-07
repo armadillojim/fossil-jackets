@@ -15,6 +15,7 @@ create table users (
 
 create table jackets (
     jid serial4 primary key,
+    version int2,
     uid int4 not null references users(uid),
     expedition varchar(256) not null,
     jacketNumber varchar(256) not null,
@@ -26,10 +27,9 @@ create table jackets (
     specimenType varchar(256),
     personnel varchar(256),
     notes varchar(1024),
-    tagVersion int2,
     tidA uuid,
     tidB uuid,
-    hmac char(44) not null,
+    jhmac char(44) not null,
     seeAlso int4 references jackets(jid)
 );
 
