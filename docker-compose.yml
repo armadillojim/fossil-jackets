@@ -22,6 +22,10 @@ services:
             - api
         environment:
             NODE_ENV: $NODE_ENV
+            REACT_NATIVE_PACKAGER_HOSTNAME: $HOST_IP
+        ports:
+            - 19000:19000
+            - 19001:19001
         volumes:
             - /fossil-jackets-app/node_modules
             - ./app:/fossil-jackets-app

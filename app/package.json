@@ -1,6 +1,6 @@
 {
   "name": "FossilJackets",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "devDependencies": {
     "react-native-scripts": "1.14.0",
@@ -21,6 +21,7 @@
   "dependencies": {
     "expo": "^27.0.1",
     "react": "16.3.1",
-    "react-native": "~0.55.2"
+    "react-native": "~0.55.2",
+    "react-navigation": "~2.2.5"
   }
 }

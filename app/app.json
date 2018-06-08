@@ -1,5 +1,11 @@
 {
   "expo": {
-    "sdkVersion": "27.0.0"
+    "githubUrl": "https://github.com/armadillojim/fossil-jackets",
+    "icon": "app-icon.png",
+    "name": "Fossil Jackets",
+    "privacy": "unlisted",
+    "sdkVersion": "27.0.0",
+    "slug": "fossil-jackets",
+    "version": "1.0.0"
   }
 }
