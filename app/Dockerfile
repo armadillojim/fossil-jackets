@@ -5,11 +5,10 @@ ENV HOME=/fossil-jackets-app
 RUN mkdir -p $HOME
 WORKDIR $HOME
 
-RUN npm install --quiet --global pm2
-
+COPY ./.babelrc $HOME
 COPY ./package.json $HOME
-RUN npm install --quiet
+COPY ./yarn.lock $HOME
 
-COPY . $HOME
+RUN yarn
 
-CMD ["npm", "run", "start"]
+CMD ["yarn", "start"]
