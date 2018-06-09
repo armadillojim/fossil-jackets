@@ -10,7 +10,7 @@ const pg = require('pg');
 
 const dbUrl = process.env.DB_URL;
 const awsRdsSsl = {
-    ca: fs.readFileSync('rds-combined-ca-bundle.pem', 'utf8'),
+    ca: fs.readFileSync('lib/rds-combined-ca-bundle.pem', 'utf8'),
     rejectUnauthorized: true,
 };
 const poolConfig = {
