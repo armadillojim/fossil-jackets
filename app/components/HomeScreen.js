@@ -18,7 +18,7 @@ class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.logo}>
-          <Image source={require('./logo.png')} style={{ height: 96, width: 96 }} />
+          <Image source={require('./assets/logo.png')} style={{ height: 96, width: 96 }} />
           <Text style={{ fontSize: 32 }}>Fossil Jackets</Text>
         </View>
         <View style={styles.nav}>
