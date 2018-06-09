@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
 
+import Strings from './assets/Strings';
+
 class NavButton extends Component {
   render() {
     const { title, screen, navigate } = this.props;
@@ -19,15 +21,15 @@ class HomeScreen extends Component {
       <View style={styles.container}>
         <View style={styles.logo}>
           <Image source={require('./assets/logo.png')} style={{ height: 96, width: 96 }} />
-          <Text style={{ fontSize: 32 }}>Fossil Jackets</Text>
+          <Text style={{ fontSize: 32 }}>{Strings.appName}</Text>
         </View>
         <View style={styles.nav}>
-          <NavButton title='New Jacket' screen='New' navigate={navigate} />
-          <NavButton title='Persist Jackets' screen='Persist' navigate={navigate} />
-          <NavButton title='View Jacket' screen='View' navigate={navigate} />
+          <NavButton title={Strings.newJacket} screen='New' navigate={navigate} />
+          <NavButton title={Strings.uploadJackets} screen='Upload' navigate={navigate} />
+          <NavButton title={Strings.viewJacket} screen='View' navigate={navigate} />
         </View>
         <View style={styles.signOut}>
-          <NavButton title='Sign Out' screen='SignOut' navigate={navigate} />
+          <NavButton title={Strings.signOut} screen='SignOut' navigate={navigate} />
         </View>
       </View>
     );
