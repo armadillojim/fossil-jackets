@@ -16,7 +16,7 @@ create table users (
 create table jackets (
     jid serial4 primary key,
     version int2,
-    uid int4 not null references users(uid),
+    juid int4 not null references users(uid),
     expedition varchar(256) not null,
     jacketNumber varchar(256) not null,
     created int8 not null,

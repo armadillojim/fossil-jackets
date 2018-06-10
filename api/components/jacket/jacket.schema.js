@@ -7,7 +7,7 @@ const jacketSchema = {
     type: 'object',
     properties: {
         version: { type: 'integer', const: 1 },
-        uid: { type: 'integer', minimum: 0 },
+        juid: { type: 'integer', minimum: 0 },
         expedition: { type: 'string', minLength: 1, maxLength: 256 },
         jacketNumber: { type: 'string', minLength: 1, maxLength: 256 },
         created: { type: 'integer', format: 'recent' },
@@ -22,7 +22,7 @@ const jacketSchema = {
         tidB: { type: 'string', format: 'uuid' },
         jhmac: { type: 'string', format: 'base64', minLength: 44, maxLength: 44 },
     },
-    required: [ 'version', 'uid', 'expedition', 'jacketNumber', 'created', 'jhmac' ],
+    required: [ 'version', 'juid', 'expedition', 'jacketNumber', 'created', 'jhmac' ],
     additionalProperties: false
 };
 

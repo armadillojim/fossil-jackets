@@ -7,7 +7,7 @@ const fakeJacketData = async (uid, generateSignature) => {
     const now = Date.now();
     const jacketData = {
         version: 1,
-        uid: uid,
+        juid: uid,
         expedition: faker.company.companyName() + ' 2018',
         jacketNumber: faker.helpers.replaceSymbols('###########?'),
         created: faker.random.number({ min: now - oneYear, max: now }),

@@ -5,7 +5,7 @@ module.exports = function(db) {
 
     const jacketFields = [
         'version',
-        'uid',
+        'juid',
         'expedition',
         'jacketNumber',
         'created',
@@ -44,7 +44,7 @@ module.exports = function(db) {
         // validate the signature
         const jhmac = jacket.jhmac;
         delete jacket.jhmac;
-        const validSignature = await verifySignature(jacket, jhmac, jacket.uid);
+        const validSignature = await verifySignature(jacket, jhmac, jacket.juid);
         if (!validSignature) { return false; }
         // write the jacket
         const jacketInsertValues = jacketValues(jacket);
