@@ -1,3 +1,5 @@
+![brachiosaurus](client/public/images/brachiosaurus-64.png?raw=true)
+
 # _Fossil Jackets_ react-native phone app
 
 This is an app to be used in field expeditions for recording metadata about
@@ -22,3 +24,8 @@ the plaster of the jacket itself).
 ### Build instructions
 
 TBD
+
+### Icons credit
+
+Thanks to [Freepik](https://www.freepik.com/) for the awesome
+[dino icons](https://www.flaticon.com/packs/dinosaur-collection)!
