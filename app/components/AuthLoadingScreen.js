@@ -3,23 +3,24 @@ import { ActivityIndicator, AsyncStorage, StyleSheet, Text, View } from 'react-n
 
 import Strings from './assets/Strings';
 
-class SignOutScreen extends Component {
+class AuthLoadingScreen extends Component {
   constructor(props) {
     super(props);
-    this._eraseCredentials(this.props.navigation.navigate);
+    this._checkCredentials(this.props.navigation.navigate);
   }
 
-  // Wipe out credentials from storage then navigate to sign in screen
-  _eraseCredentials = async (navigate) => {
-    await AsyncStorage.removeItem('user:credentials');
-    navigate('Auth');
+  // Fetch credentials from storage then navigate to home or sign in screen
+  _checkCredentials = async (navigate) => {
+    const uid = await AsyncStorage.getItem('user:uid');
+    const token = await AsyncStorage.getItem('user:token');
+    navigate(uid && token ? 'App' : 'Auth');
   };
 
   render() {
     return (
       <View style={styles.container}>
         <ActivityIndicator size='large' color='forestgreen' />
-        <Text>{Strings.signingOut}</Text>
+        <Text>{Strings.signingIn}</Text>
       </View>
     );
   }
@@ -34,4 +35,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignOutScreen;
+export default AuthLoadingScreen;
