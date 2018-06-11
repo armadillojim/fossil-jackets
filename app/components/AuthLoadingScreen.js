@@ -11,9 +11,8 @@ class AuthLoadingScreen extends Component {
 
   // Fetch credentials from storage then navigate to home or sign in screen
   _checkCredentials = async (navigate) => {
-    const uid = await AsyncStorage.getItem('user:uid');
-    const token = await AsyncStorage.getItem('user:token');
-    navigate(uid && token ? 'App' : 'Auth');
+    const credentialsString = await AsyncStorage.getItem('user:credentials');
+    navigate(credentialsString ? 'App' : 'Auth');
   };
 
   render() {
