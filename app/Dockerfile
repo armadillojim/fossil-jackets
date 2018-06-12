@@ -11,4 +11,4 @@ COPY ./yarn.lock $HOME
 
 RUN yarn
 
-CMD ["yarn", "start"]
+CMD $HOME/start.sh

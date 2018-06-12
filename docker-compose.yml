@@ -21,6 +21,7 @@ services:
         depends_on:
             - api
         environment:
+            DOMAIN: $DOMAIN
             NODE_ENV: $NODE_ENV
             REACT_NATIVE_PACKAGER_HOSTNAME: $HOST_IP
         ports:

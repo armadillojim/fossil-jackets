@@ -1,3 +1,6 @@
+# local credentials and configuration
+config.json
+
 # babel and other caches
 .babel.json
 .cache
