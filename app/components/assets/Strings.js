@@ -14,6 +14,8 @@ Strings = {
     // SignInScreen
     pleaseSignIn: 'Please sign in',
     register: 'Register',
+    token: 'Token',
+    userID: 'User ID',
     // SignOutScreen
     signingOut: 'Signing out ...',
     // TextInputs
@@ -32,6 +34,8 @@ Strings = {
     // SignInScreen
     pleaseSignIn: 'Por favor, regístrese',
     register: 'Registrame',
+    token: 'Ficha',
+    userID: 'ID de Usuario',
     // SignOutScreen
     signingOut: 'Cerrando sesión ...',
     // TextInputs
