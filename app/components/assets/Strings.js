@@ -16,6 +16,9 @@ Strings = {
     register: 'Register',
     // SignOutScreen
     signingOut: 'Signing out ...',
+    // TextInputs
+    geolocationError: 'Geolocation Error',
+    geolocationMessage: 'Something went wrong when attempting to fetch your location',
   },
   es_MX: {
     // AuthLoadingScreen
@@ -31,6 +34,9 @@ Strings = {
     register: 'Registrame',
     // SignOutScreen
     signingOut: 'Cerrando sesión ...',
+    // TextInputs
+    geolocationError: 'Error de Geolocalización',
+    geolocationMessage: 'Algo salió mal al obtener su geolocalización',
   },
 };
 
