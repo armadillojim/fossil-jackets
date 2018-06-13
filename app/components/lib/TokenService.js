@@ -9,7 +9,7 @@
 const bigBase = 2 ** 32;
 const bigBaseOctets = 4;
 
-import words from './words';
+import words from '../assets/words';
 const wordBase = words.length;
 
 const bigIntCarry = (bigInt) => {
