@@ -86,7 +86,7 @@ class SignInScreen extends Component {
           <TokenInput n={6} onChange={this.updateTokens(6)} />
         </View>
         <View style={styles.container}>
-          <Button title={Strings.register} onPress={this.signIn} />
+          <Button title={Strings.signIn} onPress={this.signIn} color='forestgreen' />
         </View>
       </View>
     );

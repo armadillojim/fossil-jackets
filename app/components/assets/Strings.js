@@ -13,7 +13,7 @@ Strings = {
     viewJacket: 'View Jacket',
     // SignInScreen
     pleaseSignIn: 'Please sign in',
-    register: 'Register',
+    signIn: 'Sign In',
     token: 'Token',
     tokenVerifyErrorTitle: 'Verification Error',
     tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your passwords.',
@@ -35,7 +35,7 @@ Strings = {
     viewJacket: 'Ver Sobrecubierta',
     // SignInScreen
     pleaseSignIn: 'Por favor, regístrese',
-    register: 'Registrame',
+    signIn: 'Inicia Sesión',
     token: 'Ficha',
     tokenVerifyErrorTitle: 'Verification Error',
     tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your passwords.',
