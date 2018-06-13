@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { AsyncStorage, Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, AsyncStorage, Button, StyleSheet, Text, View } from 'react-native';
 
+import config from '../config.json';
 import { AutoCompleteTextInput, PlainTextInput } from './TextInputs';
 import Strings from './assets/Strings';
 import words from './assets/words';
+import { decodeTokenArray, generateSignature } from './lib/TokenService';
 
 class TokenInput extends Component {
   render() {
@@ -34,13 +36,26 @@ class SignInScreen extends Component {
     this.updateTokens = this.updateTokens.bind(this);
   }
 
-  signIn = async () => {
-    const credentials = {
-      uid: 17,
-      token: 'abc',
-    };
-    await AsyncStorage.setItem('user:credentials', JSON.stringify(credentials));
-    this.props.navigation.navigate('App');
+  // NB: URL and URLSearchParams are not yet supported.  We would otherwise do:
+  //   const url = new URL(`https://${config.domain}/api${path}`);
+  //   url.search = new URLSearchParams({ uid: uid, time: now, hmac: hmac });
+  // Also, uid is from Number() applied to user-generated content so should be safe.
+  signIn = () => {
+    const { uid, tokens } = this.state;
+    const token = decodeTokenArray(tokens);
+    const now = Date.now();
+    const path = '/token/verify';
+    const hmac = generateSignature({ uid: uid, time: now, path: path }, token);
+    const urlBase = `https://${config.domain}/api${path}`;
+    const urlQuery = `uid=${uid}&time=${now}&hmac=${encodeURIComponent(hmac)}`
+    fetch(`${urlBase}?${urlQuery}`).then((res) => {
+      if (!res.ok) { throw { code: res.status, message: res.statusText }; }
+    }).then(async (res) => {
+      await AsyncStorage.setItem('user:credentials', JSON.stringify({ uid: uid, token: token }));
+      this.props.navigation.navigate('App');
+    }).catch((err) => {
+      Alert.alert(Strings.tokenVerifyErrorTitle, Strings.tokenVerifyErrorMessage);
+    });
   };
 
   updateTokens(n) {

@@ -15,6 +15,8 @@ Strings = {
     pleaseSignIn: 'Please sign in',
     register: 'Register',
     token: 'Token',
+    tokenVerifyErrorTitle: 'Verification Error',
+    tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your passwords.',
     userID: 'User ID',
     // SignOutScreen
     signingOut: 'Signing out ...',
@@ -35,6 +37,8 @@ Strings = {
     pleaseSignIn: 'Por favor, regístrese',
     register: 'Registrame',
     token: 'Ficha',
+    tokenVerifyErrorTitle: 'Verification Error',
+    tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your passwords.',
     userID: 'ID de Usuario',
     // SignOutScreen
     signingOut: 'Cerrando sesión ...',
