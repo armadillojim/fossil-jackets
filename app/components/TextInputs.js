@@ -9,7 +9,7 @@ import Strings from './assets/Strings';
 class AutoCompleteTextInput extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: '' };
+    this.state = { text: '', hideSuggestions: true };
     this.renderItem = this.renderItem.bind(this);
   }
 
@@ -18,9 +18,9 @@ class AutoCompleteTextInput extends Component {
     const { suggestions } = this.props;
     const textToLower = text.toLowerCase();
     const filteredSuggestions = suggestions.filter(
-      (suggestion) => suggestion.startsWith(textToLower)
+      (suggestion) => suggestion.toLowerCase().startsWith(textToLower)
     );
-    const oneExactMatch = filteredSuggestions.length === 1 && textToLower === filteredSuggestions[0];
+    const oneExactMatch = filteredSuggestions.length === 1 && text === filteredSuggestions[0];
     return oneExactMatch ? [] : filteredSuggestions;
   }
 
@@ -44,7 +44,7 @@ class AutoCompleteTextInput extends Component {
       onChangeText,
       placeholder,
     } = this.props;
-    const { text } = this.state;
+    const { text, hideSuggestions } = this.state;
     const filteredSuggestions = this.filterSuggestions(text);
     // The styles here are functional, but are less than ideal.
     return (
@@ -52,16 +52,19 @@ class AutoCompleteTextInput extends Component {
         <Text style={styles.label}>{label}</Text>
         <Autocomplete
           data={filteredSuggestions}
-          renderItem={this.renderItem}
+          hideResults={hideSuggestions}
           inputContainerStyle={styles.inputContainer}
           listStyle={{zIndex: 1, position: 'absolute'}}
+          renderItem={this.renderItem}
           style={styles.inputText}
           autoCapitalize={'none'}
           autoCorrect={false}
           defaultValue={text}
           keyboardType={keyboardType || 'default'}
           maxLength={maxLength || 64}
+          onBlur={() => this.setState({ hideSuggestions: true })}
           onChangeText={(text) => { this.setState({ text: text }); onChangeText(text); }}
+          onFocus={() => this.setState({ hideSuggestions: false })}
           placeholder={placeholder || ''}
           underlineColorAndroid={'transparent'}
         />

@@ -1,0 +1,5 @@
+# Localities can reveal sensitive information so we don't commit them to the
+# repository.  Formations can, too, perhaps.  Each file has a simple:
+# module.exports = [ 'Alice', 'Bob', ... ];
+formations.js
+localities.js

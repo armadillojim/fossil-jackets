@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 
 class ViewScreen extends Component {
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <Text>This is a stub for the view screen.</Text>
