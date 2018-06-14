@@ -17,8 +17,7 @@ const fakeJacketData = async (uid, generateSignature) => {
         formation: faker.company.catchPhrase(),
         specimenType: faker.random.words(),
         notes: faker.lorem.sentences(),
-        tidA: faker.random.uuid(),
-        tidB: faker.random.uuid(),
+        tid: faker.random.uuid(),
     };
 
     const personnelNames = Array(faker.random.number({ min: 0, max: 5 })).fill(null).map(() => faker.name.firstName());

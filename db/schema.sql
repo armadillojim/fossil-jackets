@@ -27,8 +27,7 @@ create table jackets (
     specimenType varchar(256),
     personnel varchar(256),
     notes varchar(1024),
-    tidA uuid,
-    tidB uuid,
+    tid uuid,
     jhmac char(44) not null,
     seeAlso int4 references jackets(jid)
 );
@@ -45,8 +44,7 @@ create table photos (
 -- Join photos to jackets
 create index photos_jid_index on photos using hash (jid);
 -- Select jacket from tag scan
-create index jackets_tidA_index on jackets using hash (tidA);
-create index jackets_tidB_index on jackets using hash (tidB);
+create index jackets_tid_index on jackets using hash (tid);
 -- Sort jackets by creation timestamp
 create index jackets_created_index on jackets (created);
 -- Filter jackets by expedition

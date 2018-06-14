@@ -16,8 +16,7 @@ module.exports = function(db) {
         'specimenType',
         'personnel',
         'notes',
-        'tidA',
-        'tidB',
+        'tid',
         'jhmac',
     ];
 
