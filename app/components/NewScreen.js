@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, AsyncStorage, Button, StyleSheet, Text, View } from 'react-native';
 
 import config from '../config.json';
 import { AutoCompleteTextInput, FixedTextInput, GeolocationTextInput, PlainTextInput } from './TextInputs';
@@ -12,6 +12,8 @@ class NewScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      version: 1,
+      juid: null,
       expedition: config.expedition,
       jacketNumber: '',
       created: Date.now(),
@@ -23,7 +25,44 @@ class NewScreen extends Component {
       personnel: '',
       notes: '',
       tid: '',
+      jhmac: null,
     };
+    this.token = null;
+    this.saveJacket = this.saveJacket.bind(this);
+    this.fetchCredentials();
+  }
+
+  // Fetch credentials from storage and keep them locally
+  fetchCredentials = async () => {
+    const credentialsString = await AsyncStorage.getItem('user:credentials');
+    const { uid, token } = JSON.parse(credentialsString);
+    this.setState({ juid: uid });
+    this.token = token;
+  };
+
+  saveJacket = async () => {
+    // copy state to a new object we can mutate
+    const jacket = {...this.state};
+    // check for required jacketNumber
+    // NB: all other fields are either not required or generated automatically (expedition and time) or hidden
+    if (!jacket.jacketNumber) {
+      Alert.alert(Strings.missingJacketNumberTitle, Strings.missingJacketNumberMessage);
+      return;
+    }
+    // remove missing values
+    if (!jacket.locality)     { delete jacket.locality; }
+    if (jacket.lat === null)  { delete jacket.lat; delete jacket.lng; }
+    if (!jacket.formation)    { delete jacket.formation; }
+    if (!jacket.specimenType) { delete jacket.specimenType; }
+    if (!jacket.personnel)    { delete jacket.personnel; }
+    if (!jacket.notes)        { delete jacket.notes; }
+    if (!jacket.tid)          { delete jacket.tid; }
+    // generate a signature, and paint the jacket data with it
+    const hmac = generateSignature(jacket, this.token);
+    jacket.jhmac = hmac;
+    // store the data, and navigate back to the home screen
+    await AsyncStorage.setItem(`jacket:${jacket.created}`, JSON.stringify(jacket));
+    this.props.navigation.navigate('Home');
   }
 
   render() {
@@ -89,7 +128,7 @@ class NewScreen extends Component {
           />
         </View>
         <View style={styles.container}>
-          <Button title={Strings.saveJacket} onPress={() => console.log(this.state)} color='forestgreen' />
+          <Button title={Strings.saveJacket} onPress={this.saveJacket} color='forestgreen' />
         </View>
       </View>
     );
