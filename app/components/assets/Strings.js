@@ -37,6 +37,16 @@ Strings = {
     // TextInputs
     geolocationError: 'Geolocation Error',
     geolocationMessage: 'Something went wrong when attempting to fetch your location',
+    // UploadScreen
+    fetchingJackets: 'Fetching jackets from storage ...',
+    noJackets: 'No jackets to upload.',
+    noJacketsTitle: 'No Jackets',
+    OK: 'OK',
+    uploadProgress: (n, N) => {
+      return (N === 1) ?
+        `${n} of ${N} jacket uploaded` :
+        `${n} of ${N} jackets uploaded`;
+    }
   },
   es_MX: {
     // AuthLoadingScreen
@@ -73,6 +83,16 @@ Strings = {
     // TextInputs
     geolocationError: 'Error de Geolocalización',
     geolocationMessage: 'Algo salió mal al obtener su geolocalización',
+    // UploadScreen
+    fetchingJackets: 'Buscando sobrecubiertas del depósito ...',
+    noJackets: 'No hay sobrecubiertas para subir.',
+    noJacketsTitle: 'Ningunas Sobrecubiertas',
+    OK: 'De acuerdo',
+    uploadProgress: (n, N) => {
+      return (N === 1) ?
+        `${n} de ${N} sobrecubierta subida` :
+        `${n} de ${N} sobrecubiertas subidas`;
+    }
   },
 };
 
