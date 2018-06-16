@@ -71,8 +71,6 @@ class UploadScreen extends Component {
         method: 'PUT',
       }).then((res) => {
         if (!res.ok) { throw { code: res.status, message: res.statusText }; }
-        return res;
-      }).then((res) => {
         return res.json();
       }).then((jid) => {
         resolve(jid);
