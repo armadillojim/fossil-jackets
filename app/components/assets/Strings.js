@@ -39,9 +39,12 @@ Strings = {
     geolocationMessage: 'Something went wrong when attempting to fetch your location',
     // UploadScreen
     fetchingJackets: 'Fetching jackets from storage ...',
+    networkError: 'All uploads failed.  Check your network connection, and try again.',
     noJackets: 'No jackets to upload.',
     noJacketsTitle: 'No Jackets',
     OK: 'OK',
+    unknownError: 'Some uploads failed.  Try again later.',
+    uploadError: 'Upload Error',
     uploadProgress: (n, N) => {
       return (N === 1) ?
         `${n} of ${N} jacket uploaded` :
@@ -85,9 +88,12 @@ Strings = {
     geolocationMessage: 'Algo salió mal al obtener su geolocalización',
     // UploadScreen
     fetchingJackets: 'Buscando sobrecubiertas del depósito ...',
+    networkError: 'Todas las subidas fallaron.  Verifique su conexión de red, y vuelva a intentarlo.',
     noJackets: 'No hay sobrecubiertas para subir.',
     noJacketsTitle: 'Ningunas Sobrecubiertas',
     OK: 'De acuerdo',
+    unknownError: 'Algunas subidas fallaron.  Inténtalo más tarde.',
+    uploadError: 'Error al Subir',
     uploadProgress: (n, N) => {
       return (N === 1) ?
         `${n} de ${N} sobrecubierta subida` :

@@ -50,6 +50,7 @@ class SignInScreen extends Component {
     const urlQuery = `uid=${uid}&time=${now}&hmac=${encodeURIComponent(hmac)}`
     fetch(`${urlBase}?${urlQuery}`).then((res) => {
       if (!res.ok) { throw { code: res.status, message: res.statusText }; }
+      return res;
     }).then(async (res) => {
       await AsyncStorage.setItem('user:credentials', JSON.stringify({ uid: uid, token: token }));
       this.props.navigation.navigate('App');

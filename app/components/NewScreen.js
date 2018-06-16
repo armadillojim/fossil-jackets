@@ -25,7 +25,6 @@ class NewScreen extends Component {
       personnel: '',
       notes: '',
       tid: '',
-      jhmac: null,
     };
     this.token = null;
     this.saveJacket = this.saveJacket.bind(this);

@@ -12,7 +12,7 @@ module.exports = function JacketRouter(jacketController) {
 
     router.put('/', (req, res, next) => {
         jacketController.putJacket(req.body)
-            .then(() => { res.status(200).send('"OK"'); })
+            .then((jid) => { res.status(200).send(`${jid}`); })
             .catch(next);
     });
 
