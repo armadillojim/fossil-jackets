@@ -25,6 +25,18 @@ const jacketSchema = {
     additionalProperties: false
 };
 
+const photoSchema = {
+    type: 'object',
+    properties: {
+        puid: { type: 'integer', minimum: 0 },
+        jid: { type: 'integer', minimum: 0 },
+        image: { type: 'string', format: 'base64', minLength: 4 },
+        phmac: { type: 'string', format: 'base64', minLength: 44, maxLength: 44 },
+    },
+    required: [ 'puid', 'jid', 'image', 'phmac' ],
+    additionalProperties: false
+};
+
 // validate a string as Base64
 // NB: ajv does not yet do any validation for `contentEncoding: "base64"`.
 const Base64Characters = /^[+/0-9=A-Za-z]*$/;
@@ -52,6 +64,7 @@ const recentFormat = {
 
 module.exports = {
     jacketSchema: jacketSchema,
+    photoSchema: photoSchema,
     base64Format: base64Format,
     recentFormat: recentFormat,
 };

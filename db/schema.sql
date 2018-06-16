@@ -34,9 +34,10 @@ create table jackets (
 
 create table photos (
     pid serial4 primary key,
+    puid int4 not null references users(uid),
     jid int4 not null references jackets(jid),
-    uri varchar(1024) not null,
-    thumb varchar(1024) not null
+    image text not null,
+    phmac char(44) not null
 );
 
 -- Indexes for queries
