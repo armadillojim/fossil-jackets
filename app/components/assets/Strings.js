@@ -45,10 +45,11 @@ Strings = {
     OK: 'OK',
     unknownError: 'Some uploads failed.  Try again later.',
     uploadError: 'Upload Error',
-    uploadProgress: (n, N) => {
+    uploadProgress: (n, N, isJacket) => {
+      const noun = isJacket ? 'jacket' : 'photo';
       return (N === 1) ?
-        `${n} of ${N} jacket uploaded` :
-        `${n} of ${N} jackets uploaded`;
+        `${n} of ${N} ${noun} uploaded` :
+        `${n} of ${N} ${noun}s uploaded`;
     }
   },
   es_MX: {
@@ -94,10 +95,11 @@ Strings = {
     OK: 'De acuerdo',
     unknownError: 'Algunas subidas fallaron.  Inténtalo más tarde.',
     uploadError: 'Error al Subir',
-    uploadProgress: (n, N) => {
+    uploadProgress: (n, N, isJacket) => {
+      const noun = isJacket ? 'sobrecubierta' : 'foto';
       return (N === 1) ?
-        `${n} de ${N} sobrecubierta subida` :
-        `${n} de ${N} sobrecubiertas subidas`;
+        `${n} de ${N} ${noun} subida` :
+        `${n} de ${N} ${noun}s subidas`;
     }
   },
 };
