@@ -3,6 +3,13 @@ module.exports = function(db) {
     const CommonService = require('../common/common.service.js');
     const { verifySignature } = new CommonService(db);
 
+    const checkHashCollision = async (table, hashField, hash) => {
+        const countQuery = `select count(*) from ${table} where ${hashField}=$1`;
+        const countResult = await db.query(countQuery, [hash]);
+        const count = Number(countResult.rows[0].count);
+        return (count ? true : false);
+    };
+
     const objectValues = (object, fields) => {
         const l = fields.length;
         const values = Array(l);
@@ -48,6 +55,9 @@ module.exports = function(db) {
         delete jacket.jhmac;
         const validSignature = await verifySignature(jacket, jhmac, jacket.juid);
         if (!validSignature) { return false; }
+        // check for duplicate of existing jacket
+        const isDuplicate = await checkHashCollision('jackets', 'jhmac', jhmac);
+        if (isDuplicate) { return false; }
         // write the jacket
         const jacketInsertValues = objectValues(jacket, jacketFields);
         jacketInsertValues[jacketFields.length - 1] = jhmac;
@@ -79,6 +89,12 @@ module.exports = function(db) {
         delete photo.phmac;
         const validSignature = await verifySignature(photo, phmac, photo.puid);
         if (!validSignature) { return false; }
+        // check for duplicate of existing photo
+        // NB: using the same photo is OK (such as a photo of an excavation
+        //     site with multiple jackets), but using the same photo by same
+        //     user of the same jacket is not OK.
+        const isDuplicate = await checkHashCollision('photos', 'phmac', phmac);
+        if (isDuplicate) { return false; }
         // write the photo
         const photoInsertValues = objectValues(photo, photoFields);
         photoInsertValues[photoFields.length - 1] = phmac;
