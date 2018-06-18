@@ -3,6 +3,7 @@ import { ActivityIndicator, Alert, AsyncStorage, ProgressBarAndroid, StyleSheet,
 
 import config from '../config.json';
 import Strings from './assets/Strings';
+import { getDataUriFromFileUri } from './lib/FileService';
 import { generateSignature } from './lib/TokenService';
 
 class UploadScreen extends Component {
@@ -73,12 +74,18 @@ class UploadScreen extends Component {
     this.setState({ nUploaded: 0, isJacket: false });
     // start our uploads
     let failure = 0;
+    const { uid, token } = this.credentials;
     for (const key of keys) {
       const photoString = await AsyncStorage.getItem(key);
       const photo = JSON.parse(photoString);
       // modify the photo's associated jacket ID to the database's value
       const jid = this.jids[photo.jid];
       photo.jid = jid;
+      // fetch the image contents and encode them
+      photo.image = await getDataUriFromFileUri(photo.image);
+      // generate a signature, and paint the photo data with it
+      const hmac = generateSignature(photo, token);
+      photo.phmac = hmac;
       // and upload it
       const pid = await this.uploadItem(photo, `/jacket/${jid}/photo`);
       if (pid === null) {

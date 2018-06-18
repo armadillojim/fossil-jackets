@@ -22,9 +22,13 @@ Strings = {
     missingJacketNumberMessage: 'In order to save the jacket data, a field number must be assigned.',
     notes: 'Notes',
     personnel: 'Personnel',
+    primaryPhoto: 'Primary Photo',
     saveJacket: 'Save Jacket',
+    secondaryPhotos: 'Secondary Photos',
     specimenType: 'Specimen Type',
     tid: 'Tag ID',
+    // PhotoInput
+    addPhoto: 'Add Photo',
     // SignInScreen
     pleaseSignIn: 'Please sign in',
     signIn: 'Sign In',
@@ -72,9 +76,13 @@ Strings = {
     missingJacketNumberMessage: 'Para guardar los datos de la sobrecubierta, es necesario asignar un número de campo.',
     notes: 'Notas',
     personnel: 'Personal',
+    primaryPhoto: 'Foto Principal',
     saveJacket: 'Guardar Sobrecubierta',
+    secondaryPhotos: 'Fotos Secundarias',
     specimenType: 'Tipo de Muestra',
     tid: 'Etiqueta ID',
+    // PhotoInput
+    addPhoto: 'Añadir Foto',
     // SignInScreen
     pleaseSignIn: 'Por favor, regístrese',
     signIn: 'Inicia Sesión',

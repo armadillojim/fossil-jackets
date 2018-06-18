@@ -32,7 +32,7 @@ module.exports = function(jacketService) {
     };
 
     const putPhoto = async (jid, photo) => {
-        const validPhoto = validatePhoto(photo) && jid === photo.jid;
+        const validPhoto = validatePhoto(photo) && Number(jid) === photo.jid;
         if (!validPhoto) { throw { status: 400, message: 'Bad request' }; }
         const pid = await jacketService.putPhoto(photo);
         if (pid === false) { throw { status:400, message: 'Bad photo signature' }; }

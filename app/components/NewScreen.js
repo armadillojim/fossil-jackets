@@ -3,6 +3,7 @@ import { Alert, AsyncStorage, Button, StyleSheet, Text, View } from 'react-nativ
 
 import config from '../config.json';
 import { AutoCompleteTextInput, FixedTextInput, GeolocationTextInput, PlainTextInput } from './TextInputs';
+import PhotoInput from './PhotoInput';
 import formations from './assets/formations';
 import localities from './assets/localities';
 import Strings from './assets/Strings';
@@ -25,6 +26,8 @@ class NewScreen extends Component {
       personnel: '',
       notes: '',
       tid: '',
+      primaryPhoto: null,
+      secondaryPhotos: [],
     };
     this.token = null;
     this.saveJacket = this.saveJacket.bind(this);
@@ -39,6 +42,17 @@ class NewScreen extends Component {
     this.token = token;
   };
 
+  savePhoto = async (photoUri, label, uid, jid) => {
+    // create an object with data necessary for upload
+    const photo = {
+      puid: uid,
+      jid: jid,
+      image: photoUri,
+    };
+    // store the data
+    await AsyncStorage.setItem(`photo:${label}:${Date.now()}`, JSON.stringify(photo));
+  };
+
   saveJacket = async () => {
     // copy state to a new object we can mutate
     const jacket = {...this.state};
@@ -48,6 +62,11 @@ class NewScreen extends Component {
       Alert.alert(Strings.missingJacketNumberTitle, Strings.missingJacketNumberMessage);
       return;
     }
+    // segregate photos
+    const primaryPhoto = jacket.primaryPhoto;
+    delete jacket.primaryPhoto;
+    const secondaryPhotos = jacket.secondaryPhotos;
+    delete jacket.secondaryPhotos;
     // remove missing values
     if (!jacket.locality)     { delete jacket.locality; }
     if (jacket.lat === null)  { delete jacket.lat; delete jacket.lng; }
@@ -60,7 +79,12 @@ class NewScreen extends Component {
     const hmac = generateSignature(jacket, this.token);
     jacket.jhmac = hmac;
     // store the data, and navigate back to the home screen
-    await AsyncStorage.setItem(`jacket:${jacket.created}`, JSON.stringify(jacket));
+    const jid = `jacket:${jacket.created}`;
+    await AsyncStorage.setItem(jid, JSON.stringify(jacket));
+    if (primaryPhoto) { await this.savePhoto(primaryPhoto.uri, 'primary', jacket.juid, jid); }
+    for (const secondaryPhoto of secondaryPhotos) {
+      await this.savePhoto(secondaryPhoto.uri, 'secondary', jacket.juid, jid);
+    }
     this.props.navigation.navigate('Home');
   }
 
@@ -125,6 +149,19 @@ class NewScreen extends Component {
             placeholder={Strings.tid}
             onChangeText={(text) => this.setState({ tid: text })}
           />
+          <PhotoInput
+            label={Strings.primaryPhoto}
+            maximum={1}
+            onChange={(imageState) => this.setState({ primaryPhoto: imageState })}
+            preventEmpty={this.state.secondaryPhotos.length}
+          />
+          { this.state.primaryPhoto &&
+          <PhotoInput
+            label={Strings.secondaryPhotos}
+            maximum={9}
+            onChange={(imageState) => this.setState({ secondaryPhotos: imageState })}
+            preventEmpty={false}
+          />}
         </View>
         <View style={styles.container}>
           <Button title={Strings.saveJacket} onPress={this.saveJacket} color='forestgreen' />
