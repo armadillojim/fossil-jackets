@@ -17,10 +17,8 @@ module.exports = function JacketRouter(jacketController) {
     });
 
     router.get('/:jid/photo/:pid', (req, res, next) => {
-        // We should call res.type('png') based the magic bytes in photo,
-        // but that requires another heavy library.
         jacketController.getPhoto(req.params.jid, req.params.pid)
-            .then((photo) => { res.status(200).send(photo); })
+            .then((photo) => { res.type(photo.type); res.status(200).send(photo.image); })
             .catch(next);
     });
 

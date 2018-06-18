@@ -1,8 +1,9 @@
 const Ajv = require('ajv');
-const { jacketSchema, photoSchema, base64Format, recentFormat } = require('./jacket.schema.js');
+const { jacketSchema, photoSchema, base64Format, imageDataUriFormat, recentFormat } = require('./jacket.schema.js');
 
 const ajv = new Ajv({ formats: {
     base64: base64Format,
+    imageDataUri: imageDataUriFormat,
     recent: recentFormat,
 }});
 const validateJacket = ajv.compile(jacketSchema);

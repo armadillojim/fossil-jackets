@@ -76,10 +76,16 @@ module.exports = function(db) {
     const photoValuesString = valuesString(photoFields.length);
 
     const photoSelectQuery = `select ${photoFieldsString} from photos where jid=$1 and pid=$2`;
+    const { imageDataUriRegexp } = require('./jacket.schema.js');
     const getPhoto = async (jid, pid) => {
         const photoSelectResult = await db.query(photoSelectQuery, [jid, pid]);
         if (!photoSelectResult.rows.length) { return null; }
-        return Buffer.from(photoSelectResult.rows[0].image, 'base64');
+        const imageDataUri = photoSelectResult.rows[0].image;
+        const match = imageDataUri.match(imageDataUriRegexp);
+        return {
+            type: match[1],
+            image: Buffer.from(imageDataUri.slice(match[0].length), 'base64'),
+        };
     };
 
     const photoInsertQuery = `insert into photos (${photoFieldsString}) values (${photoValuesString}) returning pid`;

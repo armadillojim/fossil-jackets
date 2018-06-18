@@ -30,25 +30,41 @@ const photoSchema = {
     properties: {
         puid: { type: 'integer', minimum: 0 },
         jid: { type: 'integer', minimum: 0 },
-        image: { type: 'string', format: 'base64', minLength: 4 },
+        image: { type: 'string', format: 'imageDataUri', minLength: 4 },
         phmac: { type: 'string', format: 'base64', minLength: 44, maxLength: 44 },
     },
     required: [ 'puid', 'jid', 'image', 'phmac' ],
     additionalProperties: false
 };
 
+const validBase64 = (data, offset) => {
+    const base64Length = data.length - offset;
+    const Base64Regexp = new RegExp(`^.{${offset}}[+/0-9=A-Za-z]*$`);
+    const goodCharacters = base64Length && base64Length % 4 === 0 && Base64Regexp.test(data);
+    if (!goodCharacters) { return false; }
+    const firstPad = data.indexOf('=');
+    const dataLength = data.length;
+    const okPadding = firstPad === -1 || firstPad === dataLength - 1 || firstPad === dataLength - 2 && data.slice(-1) === '=';
+    return okPadding;
+};
+
 // validate a string as Base64
 // NB: ajv does not yet do any validation for `contentEncoding: "base64"`.
-const Base64Characters = /^[+/0-9=A-Za-z]*$/;
 const base64Format = {
     type: 'string',
     validate: (data) => {
-        const l = data.length;
-        const goodCharacters = l && l % 4 === 0 && Base64Characters.test(data);
-        if (!goodCharacters) { return false; }
-        const firstPad = data.indexOf('=');
-        const okPadding = firstPad === -1 || firstPad === l - 1 || firstPad === l - 2 && data[l - 1] === '=';
-        return okPadding;
+        return validBase64(data, 0);
+    },
+};
+
+// validate a string as a data URI for an image
+const imageDataUriRegexp = new RegExp('^data:(image/.{3,16});base64,');
+const imageDataUriFormat = {
+    type: 'string',
+    validate: (data) => {
+        const match = data.match(imageDataUriRegexp);
+        if (!match) { return false; }
+        return validBase64(data, match[0].length);
     },
 };
 
@@ -66,5 +82,7 @@ module.exports = {
     jacketSchema: jacketSchema,
     photoSchema: photoSchema,
     base64Format: base64Format,
+    imageDataUriFormat: imageDataUriFormat,
+    imageDataUriRegexp: imageDataUriRegexp,
     recentFormat: recentFormat,
 };
