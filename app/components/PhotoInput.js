@@ -80,7 +80,7 @@ class PhotoInput extends Component {
     }
     // render the label and rows in a container
     return (
-      <View style={{ margin: 5, width: '97%' }}>
+      <View style={{ margin: 5, width: '97%', height: 110 * r }}>
         <Text style={{ fontSize: 8, fontWeight: 'bold' }}>{label}</Text>
         {rows}
       </View>
