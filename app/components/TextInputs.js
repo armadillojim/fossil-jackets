@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Clipboard, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 
 import Strings from './assets/Strings';
+import { buildTag } from './lib/TagService';
 
 // When using an AutoCompleteTextInput inside a ScrollView,
 // set the ScrollView's keyboardShouldPersistTaps='always'.
@@ -182,7 +183,74 @@ class PlainTextInput extends Component {
   }
 }
 
-export { AutoCompleteTextInput, FixedTextInput, GeolocationTextInput, PlainTextInput };
+class TagTextInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { uuid: '' };
+    this.getClipboard = this.getClipboard.bind(this);
+  }
+
+  stringToSerial(s) {
+    const byte = '[0-9A-F]{2}';
+    const validSerialRegExp = new RegExp(`^${byte}:${byte}:${byte}:${byte}:${byte}:${byte}:${byte}$`);
+    if (!validSerialRegExp.test(s)) { return null; }
+    return s.split(':').map(hexByte => parseInt(hexByte, 16));
+  }
+
+  getClipboard = async (showAlerts) => {
+    // check for clipboard contents, and alert if it's empty
+    const serialString = await Clipboard.getString();
+    if (!serialString) {
+      if (showAlerts) {
+        Alert.alert(Strings.emptyClipboard, Strings.emptyClipboardMessage);
+      }
+      return;
+    }
+    // check for a valid tag serial number
+    const serial = this.stringToSerial(serialString);
+    if (!serial) {
+      if (showAlerts) {
+        Alert.alert(Strings.badFormat, Strings.badFormatMessage);
+      }
+      return;
+    }
+    // get the tag data
+    const { uid, token } = this.props;
+    const { uuid, tagString } = buildTag(serial, uid, token);
+    // display the UUID in the TextInput, pass it to the parent, and set the tag payload to the clipboard
+    this.setState({ uuid: uuid });
+    this.props.onTag(uuid);
+    Clipboard.setString(tagString);
+    // give the user an alert with instructions on what to do next
+    if (showAlerts) { Alert.alert(Strings.returnToNFC, Strings.tagInstructions); }
+  };
+
+  componentDidMount() {
+    this.getClipboard(false);
+  }
+
+  render() {
+    const clipboardHitSlop = { top: 8, left: 8, bottom: 8, right: 8 };
+    const { label } = this.props;
+    const { uuid } = this.state;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.label}>{label}</Text>
+        <TextInput
+          defaultValue={uuid}
+          editable={false}
+          style={styles.input}
+          underlineColorAndroid={'transparent'}
+        />
+        <TouchableOpacity hitSlop={clipboardHitSlop} onPress={() => this.getClipboard(true)} style={styles.clipboardTouchable}>
+          <Image source={require('./assets/clipboard.png')} style={styles.clipboard} />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
+
+export { AutoCompleteTextInput, FixedTextInput, GeolocationTextInput, PlainTextInput, TagTextInput };
 
 const styles = StyleSheet.create({
   autoContainer: {
@@ -223,6 +291,15 @@ const styles = StyleSheet.create({
     top: 14,
   },
   compass: {
+    height: 24,
+    width: 24,
+  },
+  clipboardTouchable: {
+    position: 'absolute',
+    right: 4,
+    top: 14,
+  },
+  clipboard: {
     height: 24,
     width: 24,
   },

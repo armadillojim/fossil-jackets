@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Alert, AsyncStorage, Button, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import config from '../config.json';
-import { AutoCompleteTextInput, FixedTextInput, GeolocationTextInput, PlainTextInput } from './TextInputs';
+import { AutoCompleteTextInput, FixedTextInput, GeolocationTextInput, PlainTextInput, TagTextInput } from './TextInputs';
 import PhotoInput from './PhotoInput';
 import formations from './assets/formations';
 import localities from './assets/localities';
@@ -143,10 +143,11 @@ class NewScreen extends Component {
           onChangeText={(text) => this.setState({ notes: text })}
           placeholder={Strings.notes}
         />
-        <PlainTextInput
+        <TagTextInput
           label={Strings.tid}
           placeholder={Strings.tid}
-          onChangeText={(text) => this.setState({ tid: text })}
+          onTag={(text) => this.setState({ tid: text })}
+          uid={this.state.juid} token={this.token}
         />
         <PhotoInput
           label={Strings.primaryPhoto}

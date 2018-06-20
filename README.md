@@ -30,4 +30,4 @@ TBD
 Thanks to [Freepik](https://www.freepik.com/) for the awesome
 [dino icons](https://www.flaticon.com/packs/dinosaur-collection)!
 
-Thanks to [Twitter emoji](https://twemoji.twitter.com/) for the compass and satellite emoji.
+Thanks to [Twitter emoji](https://twemoji.twitter.com/) for the clipboard, compass, and satellite emoji.
