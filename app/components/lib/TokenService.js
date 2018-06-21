@@ -18,7 +18,7 @@ const bigIntCarry = (bigInt) => {
     let low = bigInt[i] % bigBase;
     let high = (bigInt[i] - low) / bigBase;
     bigInt[i] = low;
-    bigInt[i+1] = bigInt[i+1] + high || high;
+    if (high) { bigInt[i+1] = bigInt[i+1] + high || high; }
   }
   // no return; we mutate bigInt
 };
@@ -41,6 +41,13 @@ const digitsToBigInt = (digits) => {
   return bigInt;
 };
 
+// NB: we fill out all the octets in bigBase even if zero.  Less significant
+// bits can always be zero, and we cannot simply right-trim off zeros without
+// calculating in advance the precise length we need to output.  Since the
+// HMAC algorithm pads the key to the right with zeros if its length is less
+// than the blocksize, we are safe not trimming zeros on the right (most
+// significant).  This is only an issue if we begin to use passphrases near
+// the blocksize; since this is 64 bytes for SHA-2, we need not worry.
 const intToString = (n) => {
   s = Array(bigBaseOctets);
   for (var i=0; i<bigBaseOctets; i++) {
