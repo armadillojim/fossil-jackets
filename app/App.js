@@ -2,6 +2,7 @@ import React from 'react';
 import { createSwitchNavigator, createStackNavigator } from 'react-navigation';
 
 import AuthLoadingScreen from './components/AuthLoadingScreen';
+import FailsafeScreen from './components/FailsafeScreen';
 import HomeScreen from './components/HomeScreen';
 import NewScreen from './components/NewScreen';
 import SignInScreen from './components/SignInScreen';
@@ -12,6 +13,7 @@ import ViewScreen from './components/ViewScreen';
 const AuthStack = createStackNavigator({ SignIn: SignInScreen });
 const AppStack = createStackNavigator(
   {
+    Failsafe: FailsafeScreen,
     Home: HomeScreen,
     New: NewScreen,
     SignOut: SignOutScreen,

@@ -5,6 +5,17 @@ Strings = {
   en_US: {
     // AuthLoadingScreen
     signingIn: 'Signing in ...',
+    // FailsafeScreen
+    fetchingKeys: 'Fetching keys from storage ...',
+    writeFailed: 'Write Failed',
+    writeFailedMessage: 'One or more files could not be written.  You will likely be logged out.  Use Android File Transfer to see what files could be recovered.',
+    writeProgress: (n, N) => {
+      return (N === 1) ?
+        `${n} of ${N} key written` :
+        `${n} of ${N} keys written`;
+    },
+    writeSucceeded: 'Write Succeeded',
+    writeSucceededMessage: 'Files successfully written.  You will be logged out.  Use Android File Transfer to recover the files.',
     // HomeScreen
     appName: 'Fossil Jackets',
     newJacket: 'New Jacket',
@@ -65,6 +76,17 @@ Strings = {
   es_MX: {
     // AuthLoadingScreen
     signingIn: 'Iniciando sesión ...',
+    // FailsafeScreen
+    fetchingKeys: 'Buscando llaves del depósito ...',
+    writeFailed: 'Escritura Falló',
+    writeFailedMessage: 'Uno o más archivos no pudieron ser escritos.  Es probable que la sesión estará cerrado.  Use Android File Transfer para ver qué archivos se pueden recuperar.',
+    writeProgress: (n, N) => {
+      return (N === 1) ?
+        `${n} de ${N} llave escritó` :
+        `${n} de ${N} llaves escritaron`;
+    },
+    writeSucceeded: 'Escritura Tuvo Éxito',
+    writeSucceededMessage: 'Archivos escritos con éxito.  Se cerrará la sesión.  Use Android File Transfer para recuperar los archivos.',
     // HomeScreen
     appName: 'Sobrecubiertas Fósil',
     newJacket: 'Sobrecubierta Nueva',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Image, StyleSheet, Text, View } from 'react-native';
+import { Button, Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 
 import Strings from './assets/Strings';
 
@@ -20,7 +20,9 @@ class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.logo}>
-          <Image source={require('./assets/logo.png')} style={{ height: 96, width: 96 }} />
+          <TouchableWithoutFeedback delayLongPress={3000} onLongPress={() => { navigate('Failsafe'); }}>
+            <Image source={require('./assets/logo.png')} style={{ height: 96, width: 96 }} />
+          </TouchableWithoutFeedback>
           <Text style={{ fontSize: 32 }}>{Strings.appName}</Text>
         </View>
         <View style={styles.nav}>
