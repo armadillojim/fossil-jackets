@@ -71,7 +71,13 @@ Strings = {
       return (N === 1) ?
         `${n} of ${N} ${noun} uploaded` :
         `${n} of ${N} ${noun}s uploaded`;
-    }
+    },
+    // ViewScreen
+    badPayload: 'Bad Payload Format',
+    badPayloadMessage: 'The data did not appear to be the data payload from a tag: 92 characters of Base64.',
+    fetchError: 'Fetch Error',
+    fetchErrorMessage: 'Something went wrong when trying to fetch the jacket data from the server',
+    tagPayload: 'Tag Data Payload',
   },
   es_MX: {
     // AuthLoadingScreen
@@ -142,7 +148,13 @@ Strings = {
       return (N === 1) ?
         `${n} de ${N} ${noun} subida` :
         `${n} de ${N} ${noun}s subidas`;
-    }
+    },
+    // ViewScreen
+    badPayload: 'Formato de Carga Incorrecto',
+    badPayloadMessage: 'Los datos no parecían ser la carga de datos de una etiqueta: 92 caracteres de Base64.',
+    fetchError: 'Error de Descarga',
+    fetchErrorMessage: 'Algo salió mal al descargar los datos de la sobrecubierta del servidor',
+    tagPayload: 'Carga de Datos de Etiqueta',
   },
 };
 

@@ -105,6 +105,10 @@ class GeolocationTextInput extends Component {
     this.getLocation = this.getLocation.bind(this);
   }
 
+  static defaultProps = {
+    editable: true,
+  };
+
   getLocation() {
     this.setState({ gpsIcon: this.satellite });
     const fiveMinutes = 5 * 60 * 1000;
@@ -126,7 +130,7 @@ class GeolocationTextInput extends Component {
   }
 
   renderLatLng(latLng) {
-    const { lat, lng } = this.state;
+    const { lat, lng } = latLng;
     if (!lat || !lng) { return ''; }
     const northSouth = lat > 0.0 ? 'N' : 'S';
     const eastWest = lng > 0.0 ? 'E' : 'W';
@@ -134,14 +138,13 @@ class GeolocationTextInput extends Component {
   }
 
   render() {
-    const { label, onLocation } = this.props;
-    const value = this.renderLatLng(this.state);
+    const { editable, label, latLng, onLocation } = this.props;
     const compassHitSlop = { top: 8, left: 8, bottom: 8, right: 8 };
-    return (
+    return editable ? (
       <View style={styles.container}>
         <Text style={styles.label}>{label}</Text>
         <TextInput
-          defaultValue={value}
+          defaultValue={this.renderLatLng(this.state)}
           editable={false}
           style={styles.input}
           underlineColorAndroid={'transparent'}
@@ -149,6 +152,15 @@ class GeolocationTextInput extends Component {
         <TouchableOpacity hitSlop={compassHitSlop} onPress={this.getLocation} style={styles.compassTouchable}>
           <Image source={this.state.gpsIcon} style={styles.compass} />
         </TouchableOpacity>
+      </View>
+    ) : (
+      <View style={styles.container}>
+        <Text style={styles.label}>{label}</Text>
+        <TextInput
+          value={this.renderLatLng(this.props.latLng)}
+          editable={false}
+          style={styles.input}
+        />
       </View>
     );
   }

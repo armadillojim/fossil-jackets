@@ -67,7 +67,8 @@ module.exports = function(db) {
     const uuidDNS = [0x6b, 0xa7, 0xb8, 0x10,  0x9d, 0xad,  0x11, 0xd1,  0x80, 0xb4,  0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8];
     const version = 0x50;
     const generateUUID = (created, uid, serial) => {
-        const domainName = `${created}.${uid}.${serial.replace(/:/g, '')}.${DOMAIN}`;
+        serial = serial.replace(/:/g, '').toLowerCase();
+        const domainName = `${created}.${uid}.${serial}.${DOMAIN}`;
         const bytesToHash = [...uuidDNS, ...domainName.split('').map(c => c.charCodeAt(0))];
         const hash = crypto.createHash('sha1');
         hash.update(Buffer.from(bytesToHash));
@@ -100,7 +101,7 @@ module.exports = function(db) {
         }
         // uuid matches what we can regenerate knowing our domain name
         if (tag.uuid !== generateUUID(tag.created, tag.uid, tag.serial)) {
-            warnings.push(`Tag UID ${tag.uuid} does not match v5 domain UUID.`);
+            warnings.push(`Tag UUID ${tag.uuid} does not match v5 domain UUID.`);
         }
         // check the HMAC is valid
         const validSignature = await verifySignature(tag.hmacPayload, tag.hmac, tag.uid);

@@ -8,6 +8,7 @@ services:
             - db
         environment:
             API_PORT: $API_PORT
+            DOMAIN: $DOMAIN
             DB_URL: $DB_URL
             TOKEN_KEY: $TOKEN_KEY
             NODE_ENV: $NODE_ENV

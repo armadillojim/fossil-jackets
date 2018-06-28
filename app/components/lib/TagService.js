@@ -1,6 +1,6 @@
 // Encode an array of bytes into a Base64 string
 // Inspired by https://github.com/mathiasbynens/base64/blob/master/base64.js
-base64Encoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+const base64Encoding = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 const encodeBase64 = (bytes) => {
   const extraBytes = bytes.length % 3;
   // Make sure any extra bytes are handled outside of the loop

@@ -28,8 +28,8 @@ class NewScreen extends Component {
       tid: '',
       primaryPhoto: null,
       secondaryPhotos: [],
+      token: null, // removed later before saving
     };
-    this.token = null;
     this.saveJacket = this.saveJacket.bind(this);
     this.fetchCredentials();
   }
@@ -38,8 +38,7 @@ class NewScreen extends Component {
   fetchCredentials = async () => {
     const credentialsString = await AsyncStorage.getItem('user:credentials');
     const { uid, token } = JSON.parse(credentialsString);
-    this.setState({ juid: uid });
-    this.token = token;
+    this.setState({ juid: uid, token: token });
   };
 
   savePhoto = async (photoUri, label, uid, jid) => {
@@ -75,8 +74,11 @@ class NewScreen extends Component {
     if (!jacket.personnel)    { delete jacket.personnel; }
     if (!jacket.notes)        { delete jacket.notes; }
     if (!jacket.tid)          { delete jacket.tid; }
+    // store and remove token
+    const token = jacket.token;
+    delete jacket.token;
     // generate a signature, and paint the jacket data with it
-    const hmac = generateSignature(jacket, this.token);
+    const hmac = generateSignature(jacket, token);
     jacket.jhmac = hmac;
     // store the data, and navigate back to the home screen
     const jid = `jacket:${jacket.created}`;
@@ -89,7 +91,6 @@ class NewScreen extends Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <ScrollView keyboardShouldPersistTaps={'handled'} style={styles.container}>
         <FixedTextInput
@@ -147,7 +148,7 @@ class NewScreen extends Component {
           label={Strings.tid}
           placeholder={Strings.tid}
           onTag={(text) => this.setState({ tid: text })}
-          uid={this.state.juid} token={this.token}
+          uid={this.state.juid} token={this.state.token}
         />
         <PhotoInput
           label={Strings.primaryPhoto}
