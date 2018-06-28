@@ -81,7 +81,7 @@ const uuidDNS = [0x6b, 0xa7, 0xb8, 0x10,  0x9d, 0xad,  0x11, 0xd1,  0x80, 0xb4, 
 const version = 0x50;
 import { domain } from '../../config.json';
 const generateUUID = (created, uid, serial) => {
-  const domainName = `${created}.${uid}.${serial.map(b => b.toString(16)).join('')}.${domain}`;
+  const domainName = `${created}.${uid}.${serial.map(byte => padHex(byte.toString(16))).join('')}.${domain}`;
   const bytesToHash = [...uuidDNS, ...domainName.split('').map(c => c.charCodeAt(0))];
   const hashBytes = sjcl.codec.bytes.fromBits(sjcl.hash.sha1.hash(sjcl.codec.bytes.toBits(bytesToHash)));
   hashBytes[6] = (hashBytes[6] & 0x0f) | version;

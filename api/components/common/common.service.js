@@ -19,8 +19,17 @@ module.exports = function(db) {
 
     const keyFromUidQuery = 'select token from users where uid=$1 and revoked is null';
     const generateSignature = async (payload, uid) => {
-        // sort the payload into a standard order, and JSONify it
-        const payloadJSON = JSON.stringify(sortObject(payload));
+        const payloadType = typeof(payload);
+        if (payloadType === 'string') {
+            // do nothing
+        }
+        else if (payloadType === 'object') {
+            // sort the payload into a standard order, and JSONify it
+            payload = JSON.stringify(sortObject(payload));
+        }
+        else {
+            throw { message: `unknown payload type: ${payloadType}` };
+        }
         // get the user's token from the database
         const keyFromUidResult = await db.query(keyFromUidQuery, [uid]);
         if (!keyFromUidResult.rows.length) { return false; }
@@ -31,7 +40,7 @@ module.exports = function(db) {
         token += tokenDecipher.final().toString('binary');
         // use the token as the key to compute the HMAC
         const hmacSigner = crypto.createHmac('sha256', token);
-        hmacSigner.update(payloadJSON, 'utf8');
+        hmacSigner.update(payload, 'binary');
         const hmac = hmacSigner.digest('base64');
         return hmac;
     };

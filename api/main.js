@@ -1,6 +1,7 @@
 // Create an Express app
 const express = require('express');
 const app = express();
+const router = express.Router();
 
 // Create a logging facility
 const logger = require('./lib/initLogger.js');
@@ -26,17 +27,20 @@ Promise.all([
     initDb
 ]).then(([_, db]) => {
 
+    // Strip the /api prefix and pass all calls to the router
+    app.use('/api', router);
+
     // Install all our middleware
     const commonComponent = require('./components/common')(logger, db);
-    app.use(commonComponent);
+    router.use(commonComponent);
     const jacketComponent = require('./components/jacket')(db);
-    app.use('/jacket', jacketComponent);
+    router.use('/jacket', jacketComponent);
     const tokenComponent = require('./components/token')(db);
-    app.use('/token', tokenComponent);
+    router.use('/token', tokenComponent);
 
     // Install two default handlers for missing resources and for errors
-    app.use('*', (req, res, next) => { res.sendStatus(404); });
-    app.use((err, req, res, next) => {
+    router.use('*', (req, res, next) => { res.sendStatus(404); });
+    router.use((err, req, res, next) => {
         const replacer = err instanceof Error ? Object.getOwnPropertyNames(err) : null;
         logger.error('api-server got an error: ' + JSON.stringify(err, replacer, 4));
         const status = err.status || 500;

@@ -12,9 +12,20 @@ const validatePhoto = ajv.compile(photoSchema);
 module.exports = function(jacketService) {
 
     const getJacket = async (jid) => {
-        const jacket = await jacketService.getJacket(jid);
-        if (jacket === null) { throw { status: 404, message: 'No such jacket' }; }
-        return jacket;
+        // if we got a numeric value, assume it is a database row ID
+        if (Number(jid).toString() === jid) {
+            const jacket = await jacketService.getJacket(jid);
+            if (jacket === null) { throw { status: 404, message: 'No such jacket' }; }
+            return jacket;
+        }
+        // if we got a base64 string with 69 bytes, assume it is a tag payload
+        else if (jid.length === 92 && Buffer.from(jid, 'base64').toString('base64') === jid) {
+            const jacket = await jacketService.getJacketByTag(jid);
+            if (jacket === null) { throw { status: 404, message: 'No such jacket' }; }
+            return jacket;
+        }
+        // we don't recognize the format of the passed parameter
+        throw { status:400, message: 'Bad parameter' };
     };
 
     const putJacket = async (jacket) => {
