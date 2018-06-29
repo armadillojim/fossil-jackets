@@ -42,6 +42,11 @@ module.exports = function(jacketService) {
         return photo;
     };
 
+    const getPhotoIds = async (jid) => {
+        const pids = await jacketService.getPhotoIds(jid);
+        return pids;
+    };
+
     const putPhoto = async (jid, photo) => {
         const validPhoto = validatePhoto(photo) && Number(jid) === photo.jid;
         if (!validPhoto) { throw { status: 400, message: 'Bad request' }; }
@@ -55,6 +60,7 @@ module.exports = function(jacketService) {
         putJacket: putJacket,
         putPhoto: putPhoto,
         getPhoto: getPhoto,
+        getPhotoIds: getPhotoIds,
     };
 
 };

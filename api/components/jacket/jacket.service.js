@@ -165,6 +165,12 @@ module.exports = function(db) {
         };
     };
 
+    const photoIdsSelectQuery = `select pid from photos where jid=$1`;
+    const getPhotoIds = async (jid) => {
+        const photoIdsSelectResult = await db.query(photoIdsSelectQuery, [jid]);
+        return photoIdsSelectResult.rows.map((row) => row.pid);
+    };
+
     const photoInsertQuery = `insert into photos (${photoFieldsString}) values (${photoValuesString}) returning pid`;
     const putPhoto = async (photo) => {
         // validate the signature
@@ -191,6 +197,7 @@ module.exports = function(db) {
         getJacketByTag: getJacketByTag,
         putJacket: putJacket,
         getPhoto: getPhoto,
+        getPhotoIds: getPhotoIds,
         putPhoto: putPhoto,
     };
 

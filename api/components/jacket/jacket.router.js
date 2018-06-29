@@ -22,6 +22,12 @@ module.exports = function JacketRouter(jacketController) {
             .catch(next);
     });
 
+    router.get('/:id/photo', (req, res, next) => {
+        jacketController.getPhotoIds(req.params.id)
+            .then((pids) => { res.status(200).send(pids); })
+            .catch(next);
+    });
+
     router.put('/:id/photo', (req, res, next) => {
         jacketController.putPhoto(req.params.id, req.body)
             .then((pid) => { res.status(200).send(`${pid}`); })
