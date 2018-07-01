@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, AsyncStorage, ScrollView, Text, View } from 'react-native';
+import { Alert, AsyncStorage, Image, ScrollView, Text, View } from 'react-native';
 
 import { FixedTextInput, GeolocationTextInput, PlainTextInput } from './TextInputs';
 import config from '../config.json';
@@ -9,7 +9,7 @@ import { generateSignature } from './lib/TokenService';
 class ViewScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = { jacket: null };
+    this.state = { jacket: null, pids: [] };
     this.credentials = null;
     this.fetchJacket = this.fetchJacket.bind(this);
     this.fetchCredentials();
@@ -33,20 +33,26 @@ class ViewScreen extends Component {
     try {
       const jacket = await this.fetchItem(`/jacket/${encodeURIComponent(tagPayload)}`);
       this.setState({ jacket: jacket });
+      const pids = await this.fetchItem(`/jacket/${jacket.jid}/photo`);
+      this.setState({ pids: pids });
     }
     catch (err) {
       Alert.alert(Strings.fetchError, `${Strings.fetchErrorMessage}: ${JSON.stringify(err)}`);
     }
   };
 
-  fetchItem = (path) => {
+  itemUrl = (path) => {
     const { uid, token } = this.credentials;
     const now = Date.now();
     const hmac = generateSignature({ uid: uid, time: now, path: path }, token);
     const urlBase = `https://${config.domain}/api${path}`;
-    const urlQuery = `uid=${uid}&time=${now}&hmac=${encodeURIComponent(hmac)}`
+    const urlQuery = `uid=${uid}&time=${now}&hmac=${encodeURIComponent(hmac)}`;
+    return `${urlBase}?${urlQuery}`;
+  };
+
+  fetchItem = (path) => {
     return new Promise((resolve, reject) => {
-      fetch(`${urlBase}?${urlQuery}`).then((res) => {
+      fetch(this.itemUrl(path)).then((res) => {
         if (!res.ok) { throw { code: res.status, message: res.statusText }; }
         return res.json();
       }).then((item) => {
@@ -57,13 +63,28 @@ class ViewScreen extends Component {
     });
   };
 
+  photoComponent = (jid, pid) => {
+    const path = `/jacket/${jid}/photo/${pid}`;
+    const url = this.itemUrl(path);
+    return (
+      <View style={{ backgroundColor: 'white', margin: 5, width: '97%', height: 200 }} key={`photo:${pid}`}>
+        <Image
+          resizeMode={'contain'}
+          source={{uri: url}}
+          style={{ flex: 1, justifyContent: 'center', width: '100%', height: '100%' }}
+        />
+      </View>
+    );
+  };
+
   render() {
-    const { jacket } = this.state;
+    const { jacket, pids } = this.state;
     const warnings = jacket ? jacket.warnings.map((warning, i) =>
-      <View style={{ backgroundColor: 'yellow', margin: 5, width: '97%' }} key={`${i}`}>
+      <View style={{ backgroundColor: 'yellow', margin: 5, width: '97%' }} key={`warning:${i}`}>
         <Text>{warning}</Text>
       </View>
     ) : null;
+    const photos = pids.map((pid) => this.photoComponent(jacket.jid, pid));
     return jacket ? (
       <ScrollView style={{ backgroundColor: 'white' }}>
         <View style={{ backgroundColor: 'white', height: 35 }} key={'padding'}></View>
@@ -110,6 +131,7 @@ class ViewScreen extends Component {
           label={Strings.tid}
           value={jacket.tid}
         />
+        { photos }
       </ScrollView>
     ) : (
       <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'white' }}>
