@@ -40,7 +40,7 @@ module.exports = function(db) {
         token += tokenDecipher.final().toString('binary');
         // use the token as the key to compute the HMAC
         const hmacSigner = crypto.createHmac('sha256', token);
-        hmacSigner.update(payload, 'binary');
+        hmacSigner.update(payload, payloadType === 'object' ? 'utf8' : 'binary');
         const hmac = hmacSigner.digest('base64');
         return hmac;
     };
