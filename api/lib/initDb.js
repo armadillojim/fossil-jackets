@@ -16,7 +16,7 @@ const awsRdsSsl = {
 const poolConfig = {
     connectionString: dbUrl,
     ssl: (process.env.NODE_ENV === 'development') ? false : awsRdsSsl,
-    statement_timeout: 250, // 250ms timeout on queries
+    statement_timeout: 1000, // 1s timeout on queries
     connectionTimeoutMillis: 250, // 250ms timeout connecting a new client
     idleTimeoutMillis: 10000, // 10s idle time on pool connections
     max: 3, // keep 3 connections in the pool
