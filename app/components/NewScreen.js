@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, AsyncStorage, Button, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, AsyncStorage, Button, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 
 import config from '../config.json';
 import { AutoCompleteTextInput, FixedTextInput, GeolocationTextInput, PlainTextInput, TagTextInput } from './TextInputs';
@@ -92,89 +92,85 @@ class NewScreen extends Component {
 
   render() {
     return (
-      <ScrollView keyboardShouldPersistTaps={'handled'} style={styles.container}>
-        <FixedTextInput
-          label={Strings.expedition}
-          value={this.state.expedition}
-        />
-        <PlainTextInput
-          label={Strings.jacketNumber}
-          maxLength={256}
-          onChangeText={(text) => this.setState({ jacketNumber: text })}
-          placeholder={Strings.jacketNumber}
-        />
-        <FixedTextInput
-          label={Strings.dateTime}
-          value={new Date(this.state.created).toLocaleString()}
-        />
-        <AutoCompleteTextInput
-          label={Strings.locality}
-          maxLength={256}
-          onChangeText={(text) => this.setState({ locality: text })}
-          placeholder={Strings.locality}
-          suggestions={localities}
-        />
-        <GeolocationTextInput
-          label={Strings.latLng}
-          onLocation={(latLng) => this.setState(latLng)}
-        />
-        <AutoCompleteTextInput
-          label={Strings.formation}
-          maxLength={256}
-          onChangeText={(text) => this.setState({ formation: text })}
-          placeholder={Strings.formation}
-          suggestions={formations}
-        />
-        <PlainTextInput
-          label={Strings.specimenType}
-          maxLength={256}
-          onChangeText={(text) => this.setState({ specimenType: text })}
-          placeholder={Strings.specimenType}
-        />
-        <PlainTextInput
-          label={Strings.personnel}
-          maxLength={256}
-          onChangeText={(text) => this.setState({ personnel: text })}
-          placeholder={Strings.personnel}
-        />
-        <PlainTextInput
-          label={Strings.notes}
-          maxLength={1024}
-          multiline={true}
-          onChangeText={(text) => this.setState({ notes: text })}
-          placeholder={Strings.notes}
-        />
-        <TagTextInput
-          label={Strings.tid}
-          placeholder={Strings.tid}
-          onTag={(text) => this.setState({ tid: text })}
-          uid={this.state.juid} token={this.state.token}
-        />
-        <PhotoInput
-          label={Strings.primaryPhoto}
-          maximum={1}
-          onChange={(imageState) => this.setState({ primaryPhoto: imageState })}
-          preventEmpty={this.state.secondaryPhotos.length}
-        />
-        { this.state.primaryPhoto &&
-        <PhotoInput
-          label={Strings.secondaryPhotos}
-          maximum={9}
-          onChange={(imageState) => this.setState({ secondaryPhotos: imageState })}
-          preventEmpty={false}
-        />}
+      <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1, backgroundColor: 'white' }}>
+        <ScrollView keyboardShouldPersistTaps={'handled'}>
+          <FixedTextInput
+            label={Strings.expedition}
+            value={this.state.expedition}
+          />
+          <PlainTextInput
+            label={Strings.jacketNumber}
+            maxLength={256}
+            onChangeText={(text) => this.setState({ jacketNumber: text })}
+            placeholder={Strings.jacketNumber}
+          />
+          <FixedTextInput
+            label={Strings.dateTime}
+            value={new Date(this.state.created).toLocaleString()}
+          />
+          <AutoCompleteTextInput
+            label={Strings.locality}
+            maxLength={256}
+            onChangeText={(text) => this.setState({ locality: text })}
+            placeholder={Strings.locality}
+            suggestions={localities}
+          />
+          <GeolocationTextInput
+            label={Strings.latLng}
+            onLocation={(latLng) => this.setState(latLng)}
+          />
+          <AutoCompleteTextInput
+            label={Strings.formation}
+            maxLength={256}
+            onChangeText={(text) => this.setState({ formation: text })}
+            placeholder={Strings.formation}
+            suggestions={formations}
+          />
+          <PlainTextInput
+            label={Strings.specimenType}
+            maxLength={256}
+            onChangeText={(text) => this.setState({ specimenType: text })}
+            placeholder={Strings.specimenType}
+          />
+          <PlainTextInput
+            label={Strings.personnel}
+            maxLength={256}
+            onChangeText={(text) => this.setState({ personnel: text })}
+            placeholder={Strings.personnel}
+          />
+          <PlainTextInput
+            label={Strings.notes}
+            maxLength={1024}
+            multiline={true}
+            onChangeText={(text) => this.setState({ notes: text })}
+            placeholder={Strings.notes}
+          />
+          <TagTextInput
+            label={Strings.tid}
+            placeholder={Strings.tid}
+            onTag={(text) => this.setState({ tid: text })}
+            uid={this.state.juid} token={this.state.token}
+          />
+          <PhotoInput
+            label={Strings.primaryPhoto}
+            maximum={1}
+            onChange={(imageState) => this.setState({ primaryPhoto: imageState })}
+            preventEmpty={this.state.secondaryPhotos.length}
+          />
+          { this.state.primaryPhoto &&
+          <PhotoInput
+            label={Strings.secondaryPhotos}
+            maximum={9}
+            onChange={(imageState) => this.setState({ secondaryPhotos: imageState })}
+            preventEmpty={false}
+          />}
+        </ScrollView>
         <View style={{ margin: 5, width: '97%' }}>
           <Button title={Strings.saveJacket} onPress={this.saveJacket} color='forestgreen' />
         </View>
-      </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-  },
-});
 
 export default NewScreen;

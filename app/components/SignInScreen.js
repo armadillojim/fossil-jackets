@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, AsyncStorage, Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, AsyncStorage, Button, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 
 import config from '../config.json';
 import { AutoCompleteTextInput, PlainTextInput } from './TextInputs';
@@ -71,8 +71,9 @@ class SignInScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={[styles.container, { flex: 9 }]}>
+      <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1, backgroundColor: 'white' }}>
+        <ScrollView keyboardShouldPersistTaps={'handled'}>
+          <View style={{ height: 70 }}></View>
           <PlainTextInput
             keyboardType={'numeric'}
             label={Strings.userID}
@@ -85,21 +86,14 @@ class SignInScreen extends Component {
           <TokenInput n={4} onChange={this.updateTokens(4)} />
           <TokenInput n={5} onChange={this.updateTokens(5)} />
           <TokenInput n={6} onChange={this.updateTokens(6)} />
-        </View>
-        <View style={styles.container}>
+          <View style={{ height: 70 }}></View>
+        </ScrollView>
+        <View style={{ margin: 5, width: '97%' }}>
           <Button title={Strings.signIn} onPress={this.signIn} color='forestgreen' />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-  },
-});
 
 export default SignInScreen;
