@@ -101,7 +101,7 @@ class GeolocationTextInput extends Component {
     super(props);
     this.compass = require('./assets/compass.png');
     this.satellite = require('./assets/satellite.png');
-    this.state = { lat: null, lng: null, gpsIcon: this.compass };
+    this.state = { lat: null, lng: null, gpsIcon: this.compass, getting: false };
     this.getLocation = this.getLocation.bind(this);
   }
 
@@ -110,18 +110,19 @@ class GeolocationTextInput extends Component {
   };
 
   getLocation() {
-    this.setState({ gpsIcon: this.satellite });
+    if (this.state.getting) { return; }
+    this.setState({ gpsIcon: this.satellite, getting: true });
     const fiveMinutes = 5 * 60 * 1000;
     const fifteenSeconds = 15 * 1000;
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
-        this.setState({ lat: lat, lng: lng, gpsIcon: this.compass });
+        this.setState({ lat: lat, lng: lng, gpsIcon: this.compass, getting: false });
         this.props.onLocation({ lat: lat, lng: lng });
       },
       (error) => {
-        this.setState({ lat: null, lng: null, gpsIcon: this.compass });
+        this.setState({ lat: null, lng: null, gpsIcon: this.compass, getting: false });
         Alert.alert(Strings.geolocationError, `${Strings.geolocationMessage}: ${error.message}`);
         this.props.onLocation({ lat: null, lng: null });
       },
