@@ -129,12 +129,24 @@ class GeolocationTextInput extends Component {
     );
   }
 
+  renderDegrees(x) {
+    x = Math.abs(x);
+    d = Math.floor(x);
+    x -= d;
+    x *= 60.0;
+    m = Math.floor(x);
+    x -= m;
+    x *= 60.0;
+    s = x;
+    return `${d}° ${m}′ ${s.toFixed(1)}″`;
+  }
+
   renderLatLng(latLng) {
     const { lat, lng } = latLng;
     if (!lat || !lng) { return ''; }
-    const northSouth = lat > 0.0 ? 'N' : 'S';
-    const eastWest = lng > 0.0 ? 'E' : 'W';
-    return `${Math.abs(lat)} ${northSouth} ${Math.abs(lng)} ${eastWest}`;
+    const northSouth = lat > 0.0 ? Strings.north : Strings.south;
+    const eastWest = lng > 0.0 ? Strings.east : Strings.west;
+    return `${this.renderDegrees(lat)} ${northSouth} ${this.renderDegrees(lng)} ${eastWest}`;
   }
 
   render() {

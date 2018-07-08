@@ -52,12 +52,16 @@ Strings = {
     // TextInputs
     badFormat: 'Bad Format',
     badFormatMessage: 'The clipboard contents did not appear to be a serial number.  Copy the tag serial number, and try again.',
+    east: 'E',
     emptyClipboard: 'Empty Clipboard',
     emptyClipboardMessage: 'The clipboard is empty.  Copy the tag serial number, and try again.',
     geolocationError: 'Geolocation Error',
     geolocationMessage: 'Something went wrong when attempting to fetch your location',
+    north: 'N',
     returnToNFC: 'Return To NFC Tools',
+    south: 'S',
     tagInstructions: 'Return to the NFC Tools app.  Go to the “Write” tab, “Add a record” of “Text”, and paste the clipboard contents there.  Then “Write” the tag.  Finally, go to the “Other” tab and choose to “Lock tag” to prevent further (re)writing.',
+    west: 'W',
     // UploadScreen
     fetchingJackets: 'Fetching jackets from storage ...',
     networkError: 'All uploads failed.  Check your network connection, and try again.',
@@ -129,12 +133,16 @@ Strings = {
     // TextInputs
     badFormat: 'Formato Incorrecto',
     badFormatMessage: 'El contenido del portapapeles no parecía ser un número de serie.  Copie el número de serie de la etiqueta, y vuelva a intentarlo.',
+    east: 'E',
     emptyClipboard: 'Portapapeles Vacío',
     emptyClipboardMessage: 'El portapapeles está vacío.  Copie el número de serie de la etiqueta, y vuelva a intentarlo.',
     geolocationError: 'Error de Geolocalización',
     geolocationMessage: 'Algo salió mal al obtener su geolocalización',
+    north: 'N',
     returnToNFC: 'Regrese a NFC Tools',
+    south: 'S',
     tagInstructions: 'Regrese a la aplicación NFC Tools.  Vaya a la pestaña “Write”, “Add a record” de “Text”, y pegue allí el contenido del portapapeles.  Luego, “Write” la etiqueta.  Finalmente, vaya a la pestaña “Other” y elija “Lock tag” para evitar más (re)escritura.',
+    west: 'O',
     // UploadScreen
     fetchingJackets: 'Buscando sobrecubiertas del depósito ...',
     networkError: 'Todas las subidas fallaron.  Verifique su conexión de red, y vuelva a intentarlo.',
