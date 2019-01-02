@@ -23,7 +23,7 @@ the plaster of the jacket itself).
 
 ### Build instructions
 
-TBD
+See the [detailed instructions](BUILD.md).
 
 ### Icons credit
 
