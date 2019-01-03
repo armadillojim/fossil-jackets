@@ -7,6 +7,4 @@ WORKDIR $HOME
 COPY ./package.json $HOME
 RUN npm install --quiet
 
-COPY . $HOME
-
-CMD ["npm", "start"]
+CMD $HOME/start.sh

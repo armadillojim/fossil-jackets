@@ -38,6 +38,7 @@ services:
         depends_on:
             - api
         environment:
+            DOMAIN: $DOMAIN
             PORT: $CLIENT_PORT
             NODE_ENV: $NODE_ENV
         volumes:
