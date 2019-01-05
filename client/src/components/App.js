@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
-import logo from './logo.svg';
+import logo from './assets/logo.svg';
 import './App.css';
 
-import Login from '../login/Login.js';
-import Table from '../table/Table.js';
-import Item from '../item/Item.js';
+import Login from './Login.js';
+import Table from './Table.js';
+import Item from './Item.js';
 
 const loggedInRender = () => {
-  return sessionStorage.getItem('credentials') ? (
+  return sessionStorage.getItem('user:credentials') ? (
     <Redirect to="/jacket" />
   ) : (
     <Redirect to="/login" />
