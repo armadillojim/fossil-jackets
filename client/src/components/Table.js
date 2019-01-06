@@ -5,6 +5,16 @@ import Strings from './assets/Strings.js';
 import { generateSignature } from './lib/TokenService.js';
 
 class TableRow extends Component {
+  constructor(props) {
+    super(props);
+    this.viewJacket = this.viewJacket.bind(this);
+  }
+
+  viewJacket() {
+    const jid = this.props.jid;
+    this.props.history.push(`/jacket/${jid}`);
+  }
+
   renderDegrees(x) {
     x = Math.abs(x);
     const d = Math.floor(x);
@@ -37,7 +47,7 @@ class TableRow extends Component {
       specimentype,
     } = this.props;
     return (
-      <tr>
+      <tr onClick={this.viewJacket}>
         <td className="creator">{fullname}</td>
         <td className="expedition">{expedition}</td>
         <td className="jacketId">{jacketnumber}</td>
@@ -100,7 +110,7 @@ class Table extends Component {
 
   render() {
     const rows = this.state.rows.map((row) => (
-      <TableRow {...row} />
+      <TableRow key={row.jid} history={this.props.history} {...row} />
     ));
     return (
       <div className="table-responsive">

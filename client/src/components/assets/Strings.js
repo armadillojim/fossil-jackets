@@ -10,6 +10,12 @@ const Strings = {
     tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your passwords.',
     userID: 'User ID',
     // Table
+    tableTitle: 'Jackets',
+    // Item
+    itemTitle: 'Jacket',
+    personnel: 'Personnel',
+    notes: 'Notes',
+    // Table and Item
     created: 'Created',
     creator: 'Creator',
     expedition: 'Expedition',
@@ -18,8 +24,6 @@ const Strings = {
     latLng: 'Latitude/Longitude',
     locality: 'Locality',
     specimenType: 'Specimen Type',
-    tableTitle: 'Jackets',
-    // Table and Item
     east: 'E',
     north: 'N',
     south: 'S',
@@ -33,6 +37,12 @@ const Strings = {
     tokenVerifyErrorMessage: 'Se produjo un error al iniciar sesión.  Verifique su conexión de red y sus contraseñas.',
     userID: 'ID de Usuario',
     // Table
+    tableTitle: 'Sobrecubiertas',
+    // Item
+    itemTitle: 'Sobrecubierta',
+    personnel: 'Personal',
+    notes: 'Apuntes',
+    // Table and Item
     created: 'Creado',
     creator: 'Creador',
     expedition: 'Expedición',
@@ -41,8 +51,6 @@ const Strings = {
     latLng: 'Latitud / Longitud',
     locality: 'Localidad',
     specimenType: 'Tipo de Muestra',
-    tableTitle: 'Sobrecubiertas',
-    // Table and Item
     east: 'E',
     north: 'N',
     south: 'S',
