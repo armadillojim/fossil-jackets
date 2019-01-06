@@ -7,7 +7,7 @@ import { generateSignature } from './lib/TokenService.js';
 class Item extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { jacket: {}, pids: [] };
     this.credentials = JSON.parse(sessionStorage.getItem('user:credentials'));
   }
 
@@ -38,10 +38,12 @@ class Item extends Component {
     try {
       const jid = this.props.match.params.jid;
       const jacket = await this.fetchItem(`/jacket/${jid}`);
-      this.setState(jacket);
+      this.setState({ jacket: jacket });
+      const pids = await this.fetchItem(`/jacket/${jid}/photo`);
+      this.setState({ pids: pids });
     }
     catch (err) {
-      this.setState({});
+      this.setState({ jacket: {}, pids: [] });
       alert(`${Strings.fetchErrorMessage}: ${JSON.stringify(err)}`);
     }
   };
@@ -69,6 +71,16 @@ class Item extends Component {
     return `${this.renderDegrees(lat)} ${northSouth} ${this.renderDegrees(lng)} ${eastWest}`;
   }
 
+  photoTableCell(jid, pid) {
+    const path = `/jacket/${jid}/photo/${pid}`;
+    const url = this.itemUrl(path);
+    return (
+      <td key={pid}>
+        <img src={url} style={{ width: '100%' }} />
+      </td>
+    );
+  }
+
   render() {
     const jid = this.props.match.params.jid;
     const {
@@ -76,6 +88,7 @@ class Item extends Component {
       email,
       expedition,
       jacketnumber,
+      created,
       formation,
       locality,
       lat,
@@ -83,11 +96,12 @@ class Item extends Component {
       specimentype,
       personnel,
       notes,
-    } = this.state;
+    } = this.state.jacket;
     const userLink = (
       <a href={`mailto:${email}`}>{fullname}</a>
     );
-    const created = this.state.created ? new Date(this.state.created).toISOString() : '';
+    const createdString = created ? new Date(created).toISOString() : '';
+    const photos = this.state.pids.map((pid) => this.photoTableCell(jid, pid));
     return (
       <div className="table-responsive">
         <div><h3>{Strings.itemTitle} {jid}</h3></div>
@@ -103,7 +117,7 @@ class Item extends Component {
               <td>{Strings.jacketId}</td><td>{jacketnumber}</td>
             </tr>
             <tr className="created">
-              <td>{Strings.created}</td><td>{created}</td>
+              <td>{Strings.created}</td><td>{createdString}</td>
             </tr>
             <tr className="formation">
               <td>{Strings.formation}</td><td>{formation}</td>
@@ -122,6 +136,13 @@ class Item extends Component {
             </tr>
             <tr className="notes">
               <td>{Strings.notes}</td><td>{notes}</td>
+            </tr>
+          </tbody>
+        </table>
+        <table className="table">
+          <tbody>
+            <tr className="photos">
+              {photos}
             </tr>
           </tbody>
         </table>
