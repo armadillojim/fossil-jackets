@@ -11,6 +11,11 @@ const validatePhoto = ajv.compile(photoSchema);
 
 module.exports = function(jacketService) {
 
+    const getJackets = async () => {
+        const jackets = await jacketService.getJackets();
+        return jackets;
+    };
+
     const getJacket = async (jid) => {
         // if we got a numeric value, assume it is a database row ID
         if (Number(jid).toString() === jid) {
@@ -56,6 +61,7 @@ module.exports = function(jacketService) {
     };
 
     return {
+        getJackets: getJackets,
         getJacket: getJacket,
         putJacket: putJacket,
         putPhoto: putPhoto,

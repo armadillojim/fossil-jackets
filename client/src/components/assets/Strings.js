@@ -9,6 +9,16 @@ const Strings = {
     token: 'Token',
     tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your passwords.',
     userID: 'User ID',
+    // Table
+    created: 'Created',
+    creator: 'Creator',
+    expedition: 'Expedition',
+    formation: 'Formation',
+    jacketId: 'Jacket #',
+    latLng: 'Latitude/Longitude',
+    locality: 'Locality',
+    specimenType: 'Specimen Type',
+    tableTitle: 'Jackets',
     // Table and Item
     east: 'E',
     north: 'N',
@@ -22,6 +32,16 @@ const Strings = {
     token: 'Ficha',
     tokenVerifyErrorMessage: 'Se produjo un error al iniciar sesión.  Verifique su conexión de red y sus contraseñas.',
     userID: 'ID de Usuario',
+    // Table
+    created: 'Creado',
+    creator: 'Creador',
+    expedition: 'Expedición',
+    formation: 'Formación Geológica',
+    jacketNumber: 'Sobrecubierta #',
+    latLng: 'Latitud / Longitud',
+    locality: 'Localidad',
+    specimenType: 'Tipo de Muestra',
+    tableTitle: 'Sobrecubiertas',
     // Table and Item
     east: 'E',
     north: 'N',

@@ -4,6 +4,12 @@ module.exports = function JacketRouter(jacketController) {
 
     const router = express.Router();
 
+    router.get('/', (req, res, next) => {
+        jacketController.getJackets()
+            .then((jackets) => { res.status(200).send(jackets); })
+            .catch(next);
+    });
+
     router.get('/:id', (req, res, next) => {
         jacketController.getJacket(req.params.id)
             .then((jacket) => { res.status(200).send(jacket); })

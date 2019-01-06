@@ -41,6 +41,13 @@ module.exports = function(db) {
     const jacketFieldsString = jacketFields.join(', ');
     const jacketValuesString = valuesString(jacketFields.length);
 
+    const jacketsSelectQuery = `select ${jacketFieldsString}, fullname from jackets join users on users.uid=jackets.juid where seeAlso is null`;
+    const getJackets = async () => {
+        const jacketsSelectResult = await db.query(jacketsSelectQuery, []);
+        if (!jacketsSelectResult.rows.length) { return null; }
+        return jacketsSelectResult.rows;
+    };
+
     const jacketSelectQuery = `select ${jacketFieldsString} from jackets where jid=$1 and seeAlso is null`;
     const getJacket = async (jid) => {
         const jacketSelectResult = await db.query(jacketSelectQuery, [jid]);
@@ -193,6 +200,7 @@ module.exports = function(db) {
     };
 
     return {
+        getJackets: getJackets,
         getJacket: getJacket,
         getJacketByTag: getJacketByTag,
         putJacket: putJacket,
