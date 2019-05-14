@@ -166,4 +166,10 @@ Strings = {
   },
 };
 
-export default Strings[locale];
+const localeStrings = Strings[locale];
+import config from '../../config.json';
+if (config.domain.startsWith('local')) {
+  localeStrings.appName += ' (dev)';
+}
+
+export default localeStrings;

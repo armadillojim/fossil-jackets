@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:10-alpine
 
 ENV HOME=/fossil-jackets-api
 RUN mkdir -p $HOME

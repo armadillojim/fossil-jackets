@@ -22,6 +22,7 @@ services:
         depends_on:
             - api
         environment:
+            BABEL_DISABLE_CACHE: 1
             DOMAIN: $DOMAIN
             NODE_ENV: $NODE_ENV
             REACT_NATIVE_PACKAGER_HOSTNAME: $HOST_IP

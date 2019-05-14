@@ -21,3 +21,8 @@ config.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+*.jks
+*.p12
+*.key
+*.mobileprovision
