@@ -50,7 +50,16 @@ class UploadScreen extends Component {
       }
     }
     const { navigate } = this.props.navigation;
-    if (failure) {
+    if (!keys.length) {
+      Alert.alert(
+        Strings.noJacketsTitle,
+        Strings.noJackets,
+        [{ text: Strings.OK, onPress: () => { navigate('Home'); } }],
+        { cancelable: false },
+      );
+      return false;
+    }
+    else if (failure) {
       Alert.alert(
         Strings.uploadError,
         failure === keys.length ? Strings.networkError : Strings.unknownError,
@@ -144,12 +153,6 @@ class UploadScreen extends Component {
       );
     }
     else if (nJackets === 0) {
-      Alert.alert(
-        Strings.noJacketsTitle,
-        Strings.noJackets,
-        [{ text: Strings.OK, onPress: () => { navigate('Home'); } }],
-        { cancelable: false },
-      );
       return (
         <View style={styles.container}>
           <Text>{Strings.noJackets}</Text>
