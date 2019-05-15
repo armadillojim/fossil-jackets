@@ -1,8 +1,8 @@
-import I18nManager from 'I18nManager';
-const locale = I18nManager.localeIdentifier;
+import { Localization } from 'expo';
+const locale = Localization.locale;
 
 Strings = {
-  en_US: {
+  'en-US': {
     // AuthLoadingScreen
     signingIn: 'Signing in ...',
     // FailsafeScreen
@@ -76,7 +76,7 @@ Strings = {
     fetchError: 'Fetch Error',
     fetchErrorMessage: 'Something went wrong when trying to fetch the jacket data from the server',
   },
-  es_MX: {
+  'es-MX': {
     // AuthLoadingScreen
     signingIn: 'Iniciando sesión ...',
     // FailsafeScreen
