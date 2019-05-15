@@ -6,7 +6,7 @@
 const jacketSchema = {
     type: 'object',
     properties: {
-        version: { type: 'integer', const: 1 },
+        version: { type: 'integer', const: 2 },
         juid: { type: 'integer', minimum: 0 },
         expedition: { type: 'string', minLength: 1, maxLength: 256 },
         jacketNumber: { type: 'string', minLength: 1, maxLength: 256 },
@@ -18,7 +18,7 @@ const jacketSchema = {
         specimenType: { type: 'string', minLength: 1, maxLength: 256 },
         personnel: { type: 'string', minLength: 1, maxLength: 256 },
         notes: { type: 'string', minLength: 1, maxLength: 1024 },
-        tid: { type: 'string', format: 'uuid' },
+        tid: { type: 'string', pattern: '[0-9A-F]{14}' },
         jhmac: { type: 'string', format: 'base64', minLength: 44, maxLength: 44 },
     },
     required: [ 'version', 'juid', 'expedition', 'jacketNumber', 'created', 'jhmac' ],

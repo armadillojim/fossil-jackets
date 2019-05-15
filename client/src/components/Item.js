@@ -96,6 +96,7 @@ class Item extends Component {
       specimentype,
       personnel,
       notes,
+      tid,
     } = this.state.jacket;
     const userLink = (
       <a href={`mailto:${email}`}>{fullname}</a>
@@ -136,6 +137,9 @@ class Item extends Component {
             </tr>
             <tr className="notes">
               <td>{Strings.notes}</td><td>{notes}</td>
+            </tr>
+            <tr className="tid">
+              <td>{Strings.tid}</td><td>{tid}</td>
             </tr>
           </tbody>
         </table>

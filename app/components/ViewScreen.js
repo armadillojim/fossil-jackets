@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, AsyncStorage, Image, ScrollView, Text, View } from 'react-native';
 
-import { FixedTextInput, GeolocationTextInput, PlainTextInput } from './TextInputs';
+import { FixedTextInput, GeolocationTextInput, TagTextInput } from './TextInputs';
 import config from '../config.json';
 import Strings from './assets/Strings';
 import { generateSignature } from './lib/TokenService';
@@ -20,18 +20,14 @@ class ViewScreen extends Component {
     this.credentials = JSON.parse(credentialsString);
   };
 
-  fetchJacket = async (tagPayload) => {
-    // do nothing for an empty payload
-    if (!tagPayload) { return; }
-    // check that the tag payload is base64 of length 92
-    const b64RegExp = new RegExp('^(?:[A-Za-z0-9+/]{4})*$');
-    if (typeof(tagPayload) !== 'string' || tagPayload.length !== 92 || !b64RegExp.test(tagPayload)) {
-      Alert.alert(Strings.badPayload, Strings.badPayloadMessage);
-      return;
-    }
+  fetchJacket = async (tid) => {
+    // normalize tag to uppercased hex digits without punctuation
+    tid = TagTextInput.normalizeTag(tid);
+    // silently do nothing for a malformatted ID
+    if (tid.length !== 14) { return; }
     // fetch the jacket and set state
     try {
-      const jacket = await this.fetchItem(`/jacket/${encodeURIComponent(tagPayload)}`);
+      const jacket = await this.fetchItem(`/jacket/${tid}`);
       this.setState({ jacket: jacket });
       const pids = await this.fetchItem(`/jacket/${jacket.jid}/photo`);
       this.setState({ pids: pids });
@@ -79,16 +75,10 @@ class ViewScreen extends Component {
 
   render() {
     const { jacket, pids } = this.state;
-    const warnings = jacket ? jacket.warnings.map((warning, i) =>
-      <View style={{ backgroundColor: 'yellow', margin: 5, width: '97%' }} key={`warning:${i}`}>
-        <Text>{warning}</Text>
-      </View>
-    ) : null;
     const photos = pids.map((pid) => this.photoComponent(jacket.jid, pid));
     return jacket ? (
       <ScrollView style={{ backgroundColor: 'white' }}>
         <View style={{ backgroundColor: 'white', height: 35 }} key={'padding'}></View>
-        { warnings }
         <FixedTextInput
           label={Strings.expedition}
           value={jacket.expedition}
@@ -135,11 +125,8 @@ class ViewScreen extends Component {
       </ScrollView>
     ) : (
       <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'white' }}>
-        <PlainTextInput
-          label={Strings.tagPayload}
-          maxLength={92}
+        <TagTextInput
           onChangeText={this.fetchJacket}
-          placeholder={Strings.tagPayload}
         />
       </View>
     );

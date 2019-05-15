@@ -17,15 +17,18 @@ module.exports = function(jacketService) {
     };
 
     const getJacket = async (jid) => {
+        // regex patterns for tag IDs; note case sensitivity
+        const HexTIDpattern = /^[0-9A-F]{14}$/;
+        const UUIDpattern = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/;
         // if we got a numeric value, assume it is a database row ID
         if (Number(jid).toString() === jid) {
             const jacket = await jacketService.getJacket(jid);
             if (jacket === null) { throw { status: 404, message: 'No such jacket' }; }
             return jacket;
         }
-        // if we got a base64 string with 69 bytes, assume it is a tag payload
-        else if (jid.length === 92 && Buffer.from(jid, 'base64').toString('base64') === jid) {
-            const jacket = await jacketService.getJacketByTag(jid);
+        // if we got a UUID or 14-digit hexadecimal number, assume it is a tag payload
+        else if (HexTIDpattern.test(jid) || UUIDpattern.test(jid)) {
+            const jacket = await jacketService.getJacketByTagID(jid);
             if (jacket === null) { throw { status: 404, message: 'No such jacket' }; }
             return jacket;
         }

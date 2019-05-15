@@ -13,7 +13,7 @@ class NewScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      version: 1,
+      version: 2,
       juid: null,
       expedition: config.expedition,
       jacketNumber: '',
@@ -66,6 +66,8 @@ class NewScreen extends Component {
     delete jacket.primaryPhoto;
     const secondaryPhotos = jacket.secondaryPhotos;
     delete jacket.secondaryPhotos;
+    // normalize tag to uppercased hex digits without punctuation
+    jacket.tid = TagTextInput.normalizeTag(jacket.tid);
     // remove missing values
     if (!jacket.locality)     { delete jacket.locality; }
     if (jacket.lat === null)  { delete jacket.lat; delete jacket.lng; }
@@ -146,10 +148,7 @@ class NewScreen extends Component {
             placeholder={Strings.notes}
           />
           <TagTextInput
-            label={Strings.tid}
-            placeholder={Strings.tid}
-            onTag={(text) => this.setState({ tid: text })}
-            uid={this.state.juid} token={this.state.token}
+            onChangeText={(text) => this.setState({ tid: text })}
           />
           <PhotoInput
             label={Strings.primaryPhoto}

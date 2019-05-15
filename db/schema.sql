@@ -27,7 +27,7 @@ create table jackets (
     specimenType varchar(256),
     personnel varchar(256),
     notes varchar(1024),
-    tid uuid,
+    tid varchar(128),
     jhmac char(44) not null,
     seeAlso int4 references jackets(jid)
 );

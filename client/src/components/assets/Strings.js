@@ -15,6 +15,7 @@ const Strings = {
     itemTitle: 'Jacket',
     personnel: 'Personnel',
     notes: 'Notes',
+    tid: 'Tag ID / Serial Number',
     // Table and Item
     created: 'Created',
     creator: 'Creator',
@@ -42,6 +43,7 @@ const Strings = {
     itemTitle: 'Sobrecubierta',
     personnel: 'Personal',
     notes: 'Apuntes',
+    tid: 'Etiqueta ID / Número de Serie',
     // Table and Item
     created: 'Creado',
     creator: 'Creador',
