@@ -1,25 +1,9 @@
 import React, { Component } from 'react';
 
 import config from './config.json';
-import { AutoCompleteTextInput, PlainTextInput } from './TextInputs.js';
+import { PlainTextInput } from './TextInputs.js';
 import Strings from './assets/Strings.js';
-import words from './assets/words.js';
-import { decodeTokenArray, generateSignature } from './lib/TokenService.js';
-
-class TokenInput extends Component {
-  render() {
-    const { n, onChange } = this.props;
-    const label = `${Strings.token} #${n}`;
-    return (
-      <AutoCompleteTextInput
-        label={label}
-        onChangeText={onChange}
-        placeholder={label}
-        suggestions={words}
-      />
-    );
-  }
-}
+import { tokenFromPassword, generateSignature } from './lib/TokenService.js';
 
 class Login extends Component {
   static navigationOptions = {
@@ -30,9 +14,9 @@ class Login extends Component {
     super(props);
     this.state = {
       uid: null,
-      tokens: Array(6).fill(''),
+      email: null,
+      password: null,
     };
-    this.updateTokens = this.updateTokens.bind(this);
   }
 
   // NB: URL and URLSearchParams are not yet supported.  We would otherwise do:
@@ -40,8 +24,8 @@ class Login extends Component {
   //   url.search = new URLSearchParams({ uid: uid, time: now, hmac: hmac });
   // Also, uid is from Number() applied to user-generated content so should be safe.
   signIn = () => {
-    const { uid, tokens } = this.state;
-    const token = decodeTokenArray(tokens);
+    const { uid, email, password } = this.state;
+    const token = tokenFromPassword(email, password);
     const now = Date.now();
     const path = '/token/verify';
     const hmac = generateSignature({ uid: uid, time: now, path: path }, token);
@@ -58,16 +42,6 @@ class Login extends Component {
     });
   };
 
-  updateTokens(n) {
-    return (text) => {
-      this.setState((prevState) => {
-        const tokens = [...prevState.tokens];
-        tokens[n-1] = text.toLowerCase();
-        return { tokens: tokens };
-      });
-    };
-  }
-
   render() {
     return (
       <div>
@@ -78,12 +52,18 @@ class Login extends Component {
           onChangeText={(text) => this.setState({ uid: Number(text) })}
           placeholder={Strings.userID}
         />
-        <TokenInput n={1} onChange={this.updateTokens(1)} />
-        <TokenInput n={2} onChange={this.updateTokens(2)} />
-        <TokenInput n={3} onChange={this.updateTokens(3)} />
-        <TokenInput n={4} onChange={this.updateTokens(4)} />
-        <TokenInput n={5} onChange={this.updateTokens(5)} />
-        <TokenInput n={6} onChange={this.updateTokens(6)} />
+        <PlainTextInput
+          keyboardType={'email'}
+          label={Strings.email}
+          onChangeText={(text) => this.setState({ email: text })}
+          placeholder={Strings.email}
+        />
+        <PlainTextInput
+          keyboardType={'password'}
+          label={Strings.password}
+          onChangeText={(text) => this.setState({ password: text })}
+          placeholder={Strings.password}
+        />
         <div style={{ margin: 5, width: '97%' }}>
           <button title={Strings.signIn} onClick={this.signIn} style={{ color: 'white', backgroundColor: 'forestgreen' }}>
             {Strings.signIn}

@@ -17,6 +17,8 @@ const TOKEN_KEY = process.env.TOKEN_KEY;
 
 module.exports = function(db) {
 
+    const saltLength = 8;
+
     const keyFromUidQuery = 'select token from users where uid=$1 and revoked is null';
     const generateSignature = async (payload, uid) => {
         const payloadType = typeof(payload);
@@ -36,8 +38,10 @@ module.exports = function(db) {
         const tokenBase64 = keyFromUidResult.rows[0].token;
         // decrypt the token
         const tokenDecipher = crypto.createDecipher('aes256', TOKEN_KEY);
-        let token = tokenDecipher.update(tokenBase64, 'base64').toString('binary');
-        token += tokenDecipher.final().toString('binary');
+        const token = Buffer.concat([
+            tokenDecipher.update(tokenBase64, 'base64'),
+            tokenDecipher.final(),
+        ]).slice(saltLength);
         // use the token as the key to compute the HMAC
         const hmacSigner = crypto.createHmac('sha256', token);
         hmacSigner.update(payload, payloadType === 'object' ? 'utf8' : 'binary');

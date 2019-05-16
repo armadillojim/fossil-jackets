@@ -187,6 +187,7 @@ class PlainTextInput extends Component {
       multiline,
       onChangeText,
       placeholder,
+      secureTextEntry,
     } = this.props;
     return (
       <View style={styles.container}>
@@ -199,6 +200,7 @@ class PlainTextInput extends Component {
           multiline={multiline || false}
           onChangeText={onChangeText}
           placeholder={placeholder || ''}
+          secureTextEntry={secureTextEntry || false}
           style={styles.input}
           underlineColorAndroid={'transparent'}
         />

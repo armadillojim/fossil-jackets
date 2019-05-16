@@ -4,10 +4,11 @@ const locale = navigator.language;
 const Strings = {
   'en-US': {
     // Login
+    email: 'Email Address',
+    password: 'Password',
     pleaseSignIn: 'Please sign in',
     signIn: 'Sign In',
-    token: 'Token',
-    tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your passwords.',
+    tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your password.',
     userID: 'User ID',
     // Table
     tableTitle: 'Jackets',
@@ -32,10 +33,11 @@ const Strings = {
   },
   'es-MX': {
     // Login
+    email: 'Dirección de Correo Electrónico',
+    password: 'Contraseña',
     pleaseSignIn: 'Por favor, regístrese',
     signIn: 'Inicia Sesión',
-    token: 'Ficha',
-    tokenVerifyErrorMessage: 'Se produjo un error al iniciar sesión.  Verifique su conexión de red y sus contraseñas.',
+    tokenVerifyErrorMessage: 'Se produjo un error al iniciar sesión.  Por favor, verifique su conexión de red y su contraseña.',
     userID: 'ID de Usuario',
     // Table
     tableTitle: 'Sobrecubiertas',

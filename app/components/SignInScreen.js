@@ -2,25 +2,9 @@ import React, { Component } from 'react';
 import { Alert, AsyncStorage, Button, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 
 import config from '../config.json';
-import { AutoCompleteTextInput, PlainTextInput } from './TextInputs';
+import { PlainTextInput } from './TextInputs';
 import Strings from './assets/Strings';
-import words from './assets/words';
-import { decodeTokenArray, generateSignature } from './lib/TokenService';
-
-class TokenInput extends Component {
-  render() {
-    const { n, onChange } = this.props;
-    const label = `${Strings.token} #${n}`;
-    return (
-      <AutoCompleteTextInput
-        label={label}
-        onChangeText={onChange}
-        placeholder={label}
-        suggestions={words}
-      />
-    );
-  }
-}
+import { tokenFromPassword, generateSignature } from './lib/TokenService';
 
 class SignInScreen extends Component {
   static navigationOptions = {
@@ -31,9 +15,9 @@ class SignInScreen extends Component {
     super(props);
     this.state = {
       uid: null,
-      tokens: Array(6).fill(''),
+      email: null,
+      password: null,
     };
-    this.updateTokens = this.updateTokens.bind(this);
   }
 
   // NB: URL and URLSearchParams are not yet supported.  We would otherwise do:
@@ -41,8 +25,8 @@ class SignInScreen extends Component {
   //   url.search = new URLSearchParams({ uid: uid, time: now, hmac: hmac });
   // Also, uid is from Number() applied to user-generated content so should be safe.
   signIn = () => {
-    const { uid, tokens } = this.state;
-    const token = decodeTokenArray(tokens);
+    const { uid, email, password } = this.state;
+    const token = tokenFromPassword(email, password);
     const now = Date.now();
     const path = '/token/verify';
     const hmac = generateSignature({ uid: uid, time: now, path: path }, token);
@@ -59,16 +43,6 @@ class SignInScreen extends Component {
     });
   };
 
-  updateTokens(n) {
-    return (text) => {
-      this.setState((prevState) => {
-        tokens = [...prevState.tokens];
-        tokens[n-1] = text.toLowerCase();
-        return { tokens: tokens };
-      });
-    };
-  }
-
   render() {
     return (
       <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1, backgroundColor: 'white' }}>
@@ -80,12 +54,18 @@ class SignInScreen extends Component {
             onChangeText={(text) => this.setState({ uid: Number(text) })}
             placeholder={Strings.userID}
           />
-          <TokenInput n={1} onChange={this.updateTokens(1)} />
-          <TokenInput n={2} onChange={this.updateTokens(2)} />
-          <TokenInput n={3} onChange={this.updateTokens(3)} />
-          <TokenInput n={4} onChange={this.updateTokens(4)} />
-          <TokenInput n={5} onChange={this.updateTokens(5)} />
-          <TokenInput n={6} onChange={this.updateTokens(6)} />
+          <PlainTextInput
+            keyboardType={'email-address'}
+            label={Strings.email}
+            onChangeText={(text) => this.setState({ email: text })}
+            placeholder={Strings.email}
+          />
+          <PlainTextInput
+            label={Strings.password}
+            onChangeText={(text) => this.setState({ password: text })}
+            placeholder={Strings.password}
+            secureTextEntry={true}
+          />
           <View style={{ height: 70 }}></View>
         </ScrollView>
         <View style={{ margin: 5, width: '97%' }}>

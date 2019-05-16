@@ -5,12 +5,11 @@ const askQuestions = require('./lib/readlineAskQuestions.js');
 const initDb = require('./lib/initDb.js')(console);
 initDb.then((db) => {
     const { registerUser } = require('./components/token/token.service.js')(db);
-    askQuestions(['Full Name', 'Email'], async (answers) => {
+    askQuestions(['Full Name', 'Email', 'Password'], async (answers) => {
         try {
             const { uid, token } = await registerUser(...answers);
-            const stringToDictionary = require('./lib/tokenDictionary.js');
             console.log(`UID: ${uid}`);
-            console.log(`token: ${stringToDictionary(token)}`);
+            console.log(`token: ${token}`);
             const logger = require('./lib/initLogger.js');
             logger.info(`registered user ${uid} ${answers}`);
         } catch (err) {

@@ -8,12 +8,11 @@ initDb.then((db) => {
     askQuestions(['Email'], async (answers) => {
         try {
             const user = await inspectUser(...answers);
-            const stringToDictionary = require('./lib/tokenDictionary.js');
             console.log(`UID: ${user.uid}`);
             console.log(`Full name: ${user.fullname}`); // NB: capitalization b/c of postgres column name insensitivity
             console.log(`Email: ${user.email}`);
             console.log(`Issued: ${new Date(Number(user.issued))}`);
-            console.log(`token: ${stringToDictionary(user.token)}`);
+            console.log(`token: ${user.token}`);
         } catch (err) {
             console.error(err);
             return;

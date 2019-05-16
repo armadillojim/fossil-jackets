@@ -20,4 +20,4 @@
 
 1. During development, container services should automagically detect file changes and restart themselves.
 
-1. You can register users by using `docker exec fossil-jackets-api node registerUser.js`.  The script will repeat back the UID and password tokens you'll need on the phone app.  There are other convenience tools for viewing and revoking user credentials, along with inserting jackets and photos at will.
+1. You can register users by using `docker exec fossil-jackets-api node registerUser.js`.  The script will repeat back the UID you'll need on the phone app.  There are other convenience tools for viewing and revoking user credentials, along with inserting jackets and photos at will.  To reset a forgotten password, revoke the user, and re-register them with the same email address.
