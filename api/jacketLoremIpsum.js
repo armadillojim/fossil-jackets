@@ -5,8 +5,10 @@ const faker = require('faker');
 const fakeJacketData = async (uid, generateSignature) => {
     const oneYear = 365 * 86400 * 1000;
     const now = Date.now();
+    const hexDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+    const hexDigit = () => faker.random.arrayElement(hexDigits);
     const jacketData = {
-        version: 1,
+        version: 2,
         juid: uid,
         expedition: faker.company.companyName() + ' 2018',
         jacketNumber: faker.helpers.replaceSymbols('###########?'),
@@ -17,7 +19,7 @@ const fakeJacketData = async (uid, generateSignature) => {
         formation: faker.company.catchPhrase(),
         specimenType: faker.random.words(),
         notes: faker.lorem.sentences(),
-        tid: faker.random.uuid(),
+        tid: Array(14).fill().map(hexDigit).join(''),
     };
 
     const personnelNames = Array(faker.random.number({ min: 0, max: 5 })).fill(null).map(() => faker.name.firstName());
