@@ -1,5 +1,11 @@
 import { Localization } from 'expo';
-const locale = Localization.locale;
+import { Platform } from 'react-native';
+
+// on iOS, build locale string from locale==language and country
+// Android or other platform: use built-in locale already in language-country format
+const locale = (Platform.OS === 'ios') ?
+  Localization.locale + '-' + Localization.country :
+  Localization.locale;
 
 Strings = {
   'en-US': {
