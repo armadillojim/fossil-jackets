@@ -1,4 +1,4 @@
-import React from 'react';
+import { Platform } from 'react-native';
 import { createAppContainer, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 
 import AuthLoadingScreen from './components/AuthLoadingScreen';
@@ -21,7 +21,7 @@ const AppStack = createStackNavigator(
     View: ViewScreen,
   },
   {
-    headerMode: 'none',
+    headerMode: (Platform.OS === 'ios') ? 'float' : 'none',
     initialRouteName: 'Home',
   }
 );
