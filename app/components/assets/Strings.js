@@ -46,6 +46,7 @@ Strings = {
     tid: 'Tag ID / Serial Number',
     // PhotoInput
     addPhoto: 'Add Photo',
+    noPhotoPermission: 'No photo permission',
     // SignInScreen
     email: 'Email Address',
     password: 'Password',
@@ -121,6 +122,7 @@ Strings = {
     tid: 'Etiqueta ID / Número de Serie',
     // PhotoInput
     addPhoto: 'Añadir Foto',
+    noPhotoPermission: 'Sin permiso de foto',
     // SignInScreen
     email: 'Dirección de Correo Electrónico',
     password: 'Contraseña',

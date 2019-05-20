@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
-import { ImagePicker } from 'expo';
+import { Button, Image, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { ImagePicker, Permissions } from 'expo';
 
 import Strings from './assets/Strings';
 
@@ -8,9 +8,26 @@ class PhotoInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      hasPermission: true,
       images: [],
     };
     this.replaceImage = this.replaceImage.bind(this);
+  }
+
+  async componentDidMount() {
+    // CAMERA_ROLL permission is only required on iOS (not Android)
+    if (Platform.OS !== 'ios') {
+      return;
+    }
+    // check if we have permission
+    const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+    if (permission.status !== 'granted') {
+      const newPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (newPermission.status !== 'granted') {
+        // disable the component
+        this.setState({ hasPermission: false })
+      } // else we're golden
+    } // else we're golden
   }
 
   replaceImage = async (i) => {
@@ -45,7 +62,19 @@ class PhotoInput extends Component {
   };
 
   render() {
-    const { images } = this.state;
+    const { hasPermission, images } = this.state;
+    // if we don't have CAMERA_ROLL permission, display a text warning
+    if (!hasPermission) {
+      return (
+        <View style={{ margin: 5, width: '97%', height: 110 }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-evenly' }} key={`1`}>
+            <View style={{ width: 100, height: 100 }} key={'noPhotoPermission'}>
+              <Text style={{ fontWeight: 'bold' }}>{Strings.noPhotoPermission}</Text>
+            </View>
+          </View>
+        </View>
+      );
+    }
     // build some markup for all the items to display
     const that = this;
     const items = images.map((image, i) => { return (
