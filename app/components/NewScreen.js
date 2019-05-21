@@ -111,6 +111,7 @@ class NewScreen extends Component {
             value={new Date(this.state.created).toLocaleString()}
           />
           <AutoCompleteTextInput
+            iOSzIndex={2}
             label={Strings.locality}
             maxLength={256}
             onChangeText={(text) => this.setState({ locality: text })}
@@ -122,6 +123,7 @@ class NewScreen extends Component {
             onLocation={(latLng) => this.setState(latLng)}
           />
           <AutoCompleteTextInput
+            iOSzIndex={1}
             label={Strings.formation}
             maxLength={256}
             onChangeText={(text) => this.setState({ formation: text })}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 
 import Strings from './assets/Strings';
@@ -38,6 +38,7 @@ class AutoCompleteTextInput extends Component {
 
   render() {
     const {
+      iOSzIndex,
       label,
       keyboardType,
       maxLength,
@@ -48,13 +49,13 @@ class AutoCompleteTextInput extends Component {
     const filteredSuggestions = this.filterSuggestions(text);
     // The styles here are functional, but are less than ideal.
     return (
-      <View style={styles.autoContainer}>
+      <View style={[styles.autoContainer, (Platform.OS === 'ios') ? {zIndex: iOSzIndex || 1} : {}]}>
         <Text style={styles.label}>{label}</Text>
         <Autocomplete
           data={filteredSuggestions}
           hideResults={hideSuggestions}
           inputContainerStyle={styles.inputContainer}
-          listStyle={{zIndex: 1, position: 'absolute'}}
+          listStyle={ (Platform.OS === 'ios') ? {} : {zIndex: 1, position: 'absolute'} }
           renderItem={this.renderItem}
           style={styles.inputText}
           autoCapitalize={'none'}
@@ -251,9 +252,9 @@ export { AutoCompleteTextInput, FixedTextInput, GeolocationTextInput, PlainTextI
 
 const styles = StyleSheet.create({
   autoContainer: {
-    height:40,
-    margin:5,
-    width:'97%',
+    height: 40,
+    margin: 5,
+    width: '97%',
   },
   container: {
     margin: 5,
