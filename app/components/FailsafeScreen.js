@@ -10,9 +10,10 @@
 // written to the CameraRoll (and exfiltrated via MMS, Bluetooth, or others).
 
 import React, { Component } from 'react';
-import { ActivityIndicator, Alert, AsyncStorage, CameraRoll, ProgressBarAndroid, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, AsyncStorage, CameraRoll, StyleSheet, Text, View } from 'react-native';
 import { FileSystem } from 'expo';
 
+import ProgressBar from './ProgressBar';
 import Strings from './assets/Strings';
 import { getDataUriFromFileUri } from './lib/FileService';
 
@@ -100,16 +101,10 @@ class FailsafeScreen extends Component {
     // nItems > 0 always because we cannot navigate here without being logged in
     else {
       return (
-        <View style={styles.container}>
-          <Text>{Strings.writeProgress(nWritten, nItems)}</Text>
-          <ProgressBarAndroid
-            color='forestgreen'
-            indeterminate={false}
-            progress={nWritten / nItems}
-            style={{ width: '80%' }}
-            styleAttr='Horizontal'
-          />
-        </View>
+        <ProgressBar
+          label={Strings.writeProgress(nWritten, nItems)}
+          progress={nWritten / nItems}
+        />
       );
     }
   }

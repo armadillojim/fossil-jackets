@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Alert, AsyncStorage, ProgressBarAndroid, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, AsyncStorage, StyleSheet, Text, View } from 'react-native';
 
 import config from '../config.json';
+import ProgressBar from './ProgressBar';
 import Strings from './assets/Strings';
 import { getDataUriFromFileUri } from './lib/FileService';
 import { generateSignature } from './lib/TokenService';
@@ -162,16 +163,10 @@ class UploadScreen extends Component {
     else {
       const nToUpload = isJacket ? nJackets : nPhotos;
       return (
-        <View style={styles.container}>
-          <Text>{Strings.uploadProgress(nUploaded, nToUpload, isJacket)}</Text>
-          <ProgressBarAndroid
-            color='forestgreen'
-            indeterminate={false}
-            progress={nUploaded / nToUpload}
-            style={{ width: '80%' }}
-            styleAttr='Horizontal'
-          />
-        </View>
+        <ProgressBar
+          label={Strings.uploadProgress(nUploaded, nToUpload, isJacket)}
+          progress={nUploaded / nToUpload}
+        />
       );
     }
   }
