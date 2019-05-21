@@ -44,7 +44,6 @@ module.exports = function(db) {
     const jacketsSelectQuery = `select jid, ${jacketFieldsString}, fullname from jackets join users on users.uid=jackets.juid where seeAlso is null`;
     const getJackets = async () => {
         const jacketsSelectResult = await db.query(jacketsSelectQuery, []);
-        if (!jacketsSelectResult.rows.length) { return null; }
         return jacketsSelectResult.rows;
     };
 
