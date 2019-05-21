@@ -21,12 +21,15 @@ class PhotoInput extends Component {
     }
     // check if we have permission
     const permission = await Permissions.getAsync(Permissions.CAMERA_ROLL);
-    if (permission.status !== 'granted') {
-      const newPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (newPermission.status !== 'granted') {
-        // disable the component
-        this.setState({ hasPermission: false })
-      } // else we're golden
+    if (permission.status === 'granted') {
+      // we're golden
+      return;
+    }
+    // ask if we can have permission
+    const newPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (newPermission.status !== 'granted') {
+      // disable the component
+      this.setState({ hasPermission: false })
     } // else we're golden
   }
 
