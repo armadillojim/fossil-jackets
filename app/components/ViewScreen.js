@@ -97,8 +97,7 @@ class ViewScreen extends Component {
         />
         <GeolocationTextInput
           editable={false}
-          label={Strings.latLng}
-          latLng={{ lat: jacket.lat, lng: jacket.lng }}
+          location={{ elevation: jacket.elevation, lat: jacket.lat, lng: jacket.lng }}
         />
         <FixedTextInput
           label={Strings.formation}

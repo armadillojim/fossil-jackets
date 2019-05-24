@@ -21,6 +21,7 @@ class NewScreen extends Component {
       locality: '',
       lat: null,
       lng: null,
+      elevation: null,
       formation: '',
       specimenType: '',
       personnel: '',
@@ -70,7 +71,7 @@ class NewScreen extends Component {
     jacket.tid = TagTextInput.normalizeTag(jacket.tid);
     // remove missing values
     if (!jacket.locality)     { delete jacket.locality; }
-    if (jacket.lat === null)  { delete jacket.lat; delete jacket.lng; }
+    if (jacket.lat === null)  { delete jacket.lat; delete jacket.lng; delete jacket.elevation; }
     if (!jacket.formation)    { delete jacket.formation; }
     if (!jacket.specimenType) { delete jacket.specimenType; }
     if (!jacket.personnel)    { delete jacket.personnel; }
@@ -119,8 +120,7 @@ class NewScreen extends Component {
             suggestions={localities}
           />
           <GeolocationTextInput
-            label={Strings.latLng}
-            onLocation={(latLng) => this.setState(latLng)}
+            onLocation={(location) => this.setState(location)}
           />
           <AutoCompleteTextInput
             iOSzIndex={1}

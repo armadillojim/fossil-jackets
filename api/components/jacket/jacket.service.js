@@ -14,7 +14,8 @@ module.exports = function(db) {
         const l = fields.length;
         const values = Array(l);
         for (var i = 0; i < l; i++) {
-            values[i] = object[fields[i]] || null;
+            // Allow zeros but not empty strings nor missing values
+            values[i] = (object[fields[i]] || object[fields[i]] === 0) ? object[fields[i]] : null;
         }
         return values;
     };
@@ -31,6 +32,7 @@ module.exports = function(db) {
         'locality',
         'lat',
         'lng',
+        'elevation',
         'formation',
         'specimenType',
         'personnel',

@@ -1,6 +1,9 @@
 #!/bin/sh
 # Usage: docker exec -it fossil-jackets-db /db/migration_v01_to_v02.sh
 
+# Add elevation field to jackets.
+/usr/local/bin/psql $DB_URL -c 'alter table jackets add column elevation float8;'
+
 # Change tag ID from UUID to tag serial number (hex encoded).  Existing UUIDs get
 # converted to formatted strings.
 /usr/local/bin/psql $DB_URL -c 'alter table jackets alter column tid type varchar(128);'

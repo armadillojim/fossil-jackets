@@ -14,6 +14,7 @@ const jacketSchema = {
         locality: { type: 'string', minLength: 1, maxLength: 256 },
         lat: { type: 'number', minimum: -90.0, maximum: +90.0 },
         lng: { type: 'number', minimum: -180.0, maximum: +180.0 },
+        elevation: { type: 'number', minimum: -12000.0, maximum: +10000.0 },
         formation: { type: 'string', minLength: 1, maxLength: 256 },
         specimenType: { type: 'string', minLength: 1, maxLength: 256 },
         personnel: { type: 'string', minLength: 1, maxLength: 256 },

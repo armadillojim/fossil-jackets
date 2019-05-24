@@ -23,6 +23,7 @@ create table jackets (
     locality varchar(256),
     lat float8,
     lng float8,
+    elevation float8,
     formation varchar(256),
     specimenType varchar(256),
     personnel varchar(256),

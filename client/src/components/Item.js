@@ -71,6 +71,11 @@ class Item extends Component {
     return `${this.renderDegrees(lat)} ${northSouth} ${this.renderDegrees(lng)} ${eastWest}`;
   }
 
+  renderElevation(elevation) {
+    if (!(elevation || elevation === 0)) { return ''; }
+    return `${elevation}m`;
+  }
+
   photoTableCell(jid, pid) {
     const path = `/jacket/${jid}/photo/${pid}`;
     const url = this.itemUrl(path);
@@ -93,6 +98,7 @@ class Item extends Component {
       locality,
       lat,
       lng,
+      elevation,
       specimentype,
       personnel,
       notes,
@@ -128,6 +134,9 @@ class Item extends Component {
             </tr>
             <tr className="latLng">
               <td>{Strings.latLng}</td><td>{this.renderLatLng(lat, lng)}</td>
+            </tr>
+            <tr className="elevation">
+              <td>{Strings.elevation}</td><td>{this.renderElevation(elevation)}</td>
             </tr>
             <tr className="specimenType">
               <td>{Strings.specimenType}</td><td>{specimentype}</td>

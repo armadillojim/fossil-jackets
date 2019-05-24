@@ -101,7 +101,8 @@ class GeolocationTextInput extends Component {
     super(props);
     this.compass = require('./assets/compass.png');
     this.satellite = require('./assets/satellite.png');
-    this.state = { lat: null, lng: null, gpsIcon: this.compass, getting: false };
+    this.noLocation = { elevation: null, lat: null, lng: null };
+    this.state = { location: this.noLocation, gpsIcon: this.compass, getting: false };
     this.getLocation = this.getLocation.bind(this);
   }
 
@@ -116,15 +117,18 @@ class GeolocationTextInput extends Component {
     const fifteenSeconds = 15 * 1000;
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        this.setState({ lat: lat, lng: lng, gpsIcon: this.compass, getting: false });
-        this.props.onLocation({ lat: lat, lng: lng });
+        const location = {
+          elevation: position.coords.altitude,
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        this.setState({ location: location, gpsIcon: this.compass, getting: false });
+        this.props.onLocation(location);
       },
       (error) => {
-        this.setState({ lat: null, lng: null, gpsIcon: this.compass, getting: false });
+        this.setState({ location: this.noLocation, gpsIcon: this.compass, getting: false });
         Alert.alert(Strings.geolocationError, `${Strings.geolocationMessage}: ${error.message}`);
-        this.props.onLocation({ lat: null, lng: null });
+        this.props.onLocation(this.noLocation);
       },
       { enableHighAccuracy: true, maximumAge: fiveMinutes, timeout: fifteenSeconds },
     );
@@ -150,30 +154,58 @@ class GeolocationTextInput extends Component {
     return `${this.renderDegrees(lat)} ${northSouth} ${this.renderDegrees(lng)} ${eastWest}`;
   }
 
+  renderElevation(location) {
+    const { elevation } = location;
+    if (!(elevation || elevation === 0)) { return ''; }
+    return `${elevation}m`;
+  }
+
   render() {
-    const { editable, label, latLng, onLocation } = this.props;
+    const { editable } = this.props;
+    const { location, gpsIcon } = this.state;
     const compassHitSlop = { top: 8, left: 8, bottom: 8, right: 8 };
     return editable ? (
-      <View style={styles.container}>
-        <Text style={styles.label}>{label}</Text>
-        <TextInput
-          defaultValue={this.renderLatLng(this.state)}
-          editable={false}
-          style={styles.input}
-          underlineColorAndroid={'transparent'}
-        />
-        <TouchableOpacity hitSlop={compassHitSlop} onPress={this.getLocation} style={styles.compassTouchable}>
-          <Image source={this.state.gpsIcon} style={styles.compass} />
-        </TouchableOpacity>
+      <View>
+        <View style={styles.container}>
+          <Text style={styles.label}>{Strings.latLng}</Text>
+          <TextInput
+            defaultValue={this.renderLatLng(location)}
+            editable={false}
+            style={styles.input}
+            underlineColorAndroid={'transparent'}
+          />
+          <TouchableOpacity hitSlop={compassHitSlop} onPress={this.getLocation} style={styles.compassTouchable}>
+            <Image source={gpsIcon} style={styles.compass} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.container}>
+          <Text style={styles.label}>{Strings.elevation}</Text>
+          <TextInput
+            defaultValue={this.renderElevation(location)}
+            editable={false}
+            style={styles.input}
+            underlineColorAndroid={'transparent'}
+          />
+        </View>
       </View>
     ) : (
-      <View style={styles.container}>
-        <Text style={styles.label}>{label}</Text>
-        <TextInput
-          value={this.renderLatLng(this.props.latLng)}
-          editable={false}
-          style={styles.input}
-        />
+      <View>
+        <View style={styles.container}>
+          <Text style={styles.label}>{label}</Text>
+          <TextInput
+            value={this.renderLatLng(this.props.location)}
+            editable={false}
+            style={styles.input}
+          />
+        </View>
+        <View style={styles.container}>
+          <Text style={styles.label}>{Strings.elevation}</Text>
+          <TextInput
+            value={this.renderElevation(this.props.location)}
+            editable={false}
+            style={styles.input}
+          />
+        </View>
       </View>
     );
   }

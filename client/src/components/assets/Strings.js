@@ -14,6 +14,7 @@ const Strings = {
     tableTitle: 'Jackets',
     // Item
     itemTitle: 'Jacket',
+    elevation: 'Elevation',
     personnel: 'Personnel',
     notes: 'Notes',
     tid: 'Tag ID / Serial Number',
@@ -43,6 +44,7 @@ const Strings = {
     tableTitle: 'Sobrecubiertas',
     // Item
     itemTitle: 'Sobrecubierta',
+    elevation: 'Elevación',
     personnel: 'Personal',
     notes: 'Apuntes',
     tid: 'Etiqueta ID / Número de Serie',
