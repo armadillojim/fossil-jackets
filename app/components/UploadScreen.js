@@ -31,8 +31,13 @@ class UploadScreen extends Component {
     const photoKeys = keys.filter((key) => key.startsWith('photo:'));
     photoKeys.sort(); // ensure primary photos come first
     this.setState({ nJackets: jacketKeys.length, nPhotos: photoKeys.length });
-    const success = await this.uploadJackets(jacketKeys);
-    if (success) { await this.uploadPhotos(photoKeys); }
+    const success = await this.uploadJackets(jacketKeys) && await this.uploadPhotos(photoKeys);
+    if (success) { Alert.alert(
+      Strings.success,
+      '✅',
+      [{ text: Strings.OK, onPress: () => { this.props.navigation.navigate('Home'); } }],
+      { cancelable: false },
+    ); }
   }
 
   uploadJackets = async (keys) => {
@@ -75,10 +80,9 @@ class UploadScreen extends Component {
   }
 
   uploadPhotos = async (keys) => {
-    // if there are no photos, go home
-    const { navigate } = this.props.navigation;
+    // if there are no photos, we're done
     if (!keys.length) {
-      navigate('Home');
+      return true;
     }
     // reset component state
     this.setState({ nUploaded: 0, isJacket: false });
@@ -110,12 +114,13 @@ class UploadScreen extends Component {
       Alert.alert(
         Strings.uploadError,
         failure === keys.length ? Strings.networkError : Strings.unknownError,
-        [{ text: Strings.OK, onPress: () => { navigate('Home'); } }],
+        [{ text: Strings.OK, onPress: () => { this.props.navigation.navigate('Home'); } }],
         { cancelable: false },
       );
+      return false;
     }
     else {
-      navigate('Home');
+      return true;
     }
   }
 
@@ -143,7 +148,6 @@ class UploadScreen extends Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
     const { nJackets, nPhotos, nUploaded, isJacket } = this.state;
     if (nJackets === null) {
       return (

@@ -90,7 +90,12 @@ class NewScreen extends Component {
     for (const secondaryPhoto of secondaryPhotos) {
       await this.savePhoto(secondaryPhoto.uri, 'secondary', jacket.juid, jid);
     }
-    this.props.navigation.navigate('Home');
+    Alert.alert(
+      Strings.success,
+      '✅',
+      [{ text: Strings.OK, onPress: () => { this.props.navigation.navigate('Home'); } }],
+      { cancelable: false },
+    );
   }
 
   render() {

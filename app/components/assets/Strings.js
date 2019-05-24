@@ -43,6 +43,7 @@ Strings = {
     saveJacket: 'Save Jacket',
     secondaryPhotos: 'Secondary Photos',
     specimenType: 'Specimen Type',
+    success: 'Success!',
     tid: 'Tag ID / Serial Number',
     // PhotoInput
     addPhoto: 'Add Photo',
@@ -120,6 +121,7 @@ Strings = {
     saveJacket: 'Guardar Sobrecubierta',
     secondaryPhotos: 'Fotos Secundarias',
     specimenType: 'Tipo de Muestra',
+    success: '¡Éxito!',
     tid: 'Etiqueta ID / Número de Serie',
     // PhotoInput
     addPhoto: 'Añadir Foto',
