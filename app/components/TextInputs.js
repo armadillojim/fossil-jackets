@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Alert, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 import Autocomplete from 'react-native-autocomplete-input';
 
 import Strings from './assets/Strings';
@@ -99,10 +100,8 @@ class FixedTextInput extends Component {
 class GeolocationTextInput extends Component {
   constructor(props) {
     super(props);
-    this.compass = require('./assets/compass.png');
-    this.satellite = require('./assets/satellite.png');
     this.noLocation = { elevation: null, lat: null, lng: null };
-    this.state = { location: this.noLocation, gpsIcon: this.compass, getting: false };
+    this.state = { location: this.noLocation, getting: false };
     this.getLocation = this.getLocation.bind(this);
   }
 
@@ -112,7 +111,7 @@ class GeolocationTextInput extends Component {
 
   getLocation() {
     if (this.state.getting) { return; }
-    this.setState({ gpsIcon: this.satellite, getting: true });
+    this.setState({ getting: true });
     const fiveMinutes = 5 * 60 * 1000;
     const fifteenSeconds = 15 * 1000;
     navigator.geolocation.getCurrentPosition(
@@ -122,11 +121,11 @@ class GeolocationTextInput extends Component {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         };
-        this.setState({ location: location, gpsIcon: this.compass, getting: false });
+        this.setState({ location: location, getting: false });
         this.props.onLocation(location);
       },
       (error) => {
-        this.setState({ location: this.noLocation, gpsIcon: this.compass, getting: false });
+        this.setState({ location: this.noLocation, getting: false });
         Alert.alert(Strings.geolocationError, `${Strings.geolocationMessage}: ${error.message}`);
         this.props.onLocation(this.noLocation);
       },
@@ -162,7 +161,7 @@ class GeolocationTextInput extends Component {
 
   render() {
     const { editable } = this.props;
-    const { location, gpsIcon } = this.state;
+    const { location, getting } = this.state;
     const compassHitSlop = { top: 8, left: 8, bottom: 8, right: 8 };
     return editable ? (
       <View>
@@ -175,7 +174,10 @@ class GeolocationTextInput extends Component {
             underlineColorAndroid={'transparent'}
           />
           <TouchableOpacity hitSlop={compassHitSlop} onPress={this.getLocation} style={styles.compassTouchable}>
-            <Image source={gpsIcon} style={styles.compass} />
+            <Icon
+              name={ getting ? 'satellite-variant' : 'compass' }
+              size={ (Platform.OS === 'ios') ? 20 : 28 }
+            />
           </TouchableOpacity>
         </View>
         <View style={styles.container}>
@@ -317,11 +319,7 @@ const styles = StyleSheet.create({
   },
   compassTouchable: {
     position: 'absolute',
-    right: 4,
-    top: 14,
-  },
-  compass: {
-    height: 24,
-    width: 24,
+    right: 5,
+    top: 11,
   },
 });
