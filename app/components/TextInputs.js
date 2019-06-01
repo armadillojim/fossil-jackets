@@ -193,7 +193,7 @@ class GeolocationTextInput extends Component {
     ) : (
       <View>
         <View style={styles.container}>
-          <Text style={styles.label}>{label}</Text>
+          <Text style={styles.label}>{Strings.latLng}</Text>
           <TextInput
             value={this.renderLatLng(this.props.location)}
             editable={false}
