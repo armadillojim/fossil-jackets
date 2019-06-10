@@ -1,0 +1,40 @@
+@keyframes dots-pulse {
+  0% {
+    opacity: 0.1;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {opacity: 0.1}
+}
+
+.waiting {
+  width: 10%;
+  margin: 0 auto;
+}
+
+.dots {
+  text-align: center;
+}
+
+.dots .circle {
+  border-radius: 100%;
+  display: inline-block;
+  margin-right: 1em;
+  background-color: forestgreen;
+  width: 1em;
+  height: 1em;
+  animation-name: dots-pulse;
+  animation-duration: inherit;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.dots .circle:last-child {
+  margin-right: 0;
+}
+
+.signingIn {
+  font-size: 16px;
+  text-align: center;
+}

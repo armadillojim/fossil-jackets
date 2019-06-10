@@ -49,6 +49,18 @@ module.exports = function(db) {
         return hmac;
     };
 
+    const uidFromEmailQuery = 'select uid from users where email=$1 and revoked is null';
+    const getUidFromEmail = async (email) => {
+        // delay lookup to frustrate scrapers
+        const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+        await sleep(1000);
+        // check for a valid user with that email address
+        const uidFromEmailResult = await db.query(uidFromEmailQuery, [email]);
+        if (!uidFromEmailResult.rows.length) { return false; }
+        const uid = uidFromEmailResult.rows[0].uid;
+        return uid;
+    };
+
     const verifySignature = async (payload, hmacThem, uid) => {
         const hmacUs = await generateSignature(payload, uid);
         return (hmacUs === hmacThem);
@@ -56,6 +68,7 @@ module.exports = function(db) {
 
     return {
         generateSignature: generateSignature,
+        getUidFromEmail: getUidFromEmail,
         verifySignature: verifySignature,
     };
 

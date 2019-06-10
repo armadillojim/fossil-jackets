@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, AsyncStorage, Button, KeyboardAvoidingView, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Alert, AsyncStorage, Button, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import config from '../config.json';
 import { PlainTextInput } from './TextInputs';
@@ -14,46 +14,48 @@ class SignInScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      uid: null,
       email: null,
       password: null,
+      waiting: false,
     };
   }
 
   // NB: URL and URLSearchParams are not yet supported.  We would otherwise do:
   //   const url = new URL(`https://${config.domain}/api${path}`);
-  //   url.search = new URLSearchParams({ uid: uid, time: now, hmac: hmac });
-  // Also, uid is from Number() applied to user-generated content so should be safe.
+  //   url.search = new URLSearchParams({ email: email, time: now, hmac: hmac });
   signIn = () => {
-    const { uid, email, password } = this.state;
+    const email = this.state.email.toLowerCase();
+    const password = this.state.password;
     const token = tokenFromPassword(email, password);
     const now = Date.now();
     const path = '/token/verify';
-    const hmac = generateSignature({ uid: uid, time: now, path: path }, token);
+    const hmac = generateSignature({ email: email, path: path, time: now }, token);
     const urlBase = `https://${config.domain}/api${path}`;
-    const urlQuery = `uid=${uid}&time=${now}&hmac=${encodeURIComponent(hmac)}`
+    const urlQuery = `email=${encodeURIComponent(email)}&time=${now}&hmac=${encodeURIComponent(hmac)}`;
+    this.setState({ waiting: true });
     fetch(`${urlBase}?${urlQuery}`).then((res) => {
+      this.setState({ waiting: false });
       if (!res.ok) { throw { code: res.status, message: res.statusText }; }
-      return res;
+      return res.json();
     }).then(async (res) => {
-      await AsyncStorage.setItem('user:credentials', JSON.stringify({ uid: uid, token: token }));
+      await AsyncStorage.setItem('user:credentials', JSON.stringify({ uid: res.uid, token: token }));
       this.props.navigation.navigate('App');
     }).catch((err) => {
       Alert.alert(Strings.tokenVerifyErrorTitle, Strings.tokenVerifyErrorMessage);
+      this.setState({ waiting: false });
     });
   };
 
   render() {
-    return (
-      <KeyboardAvoidingView behavior={'padding'} style={{ flex: 1, backgroundColor: 'white' }}>
+    return this.state.waiting ? (
+      <View style={styles.container}>
+        <ActivityIndicator size='large' color='forestgreen' />
+        <Text>{Strings.signingIn}</Text>
+      </View>
+    ) : (
+      <KeyboardAvoidingView behavior={'padding'} style={styles.keyboardView}>
         <ScrollView keyboardShouldPersistTaps={'handled'}>
           <View style={{ height: 70 }}></View>
-          <PlainTextInput
-            keyboardType={'numeric'}
-            label={Strings.userID}
-            onChangeText={(text) => this.setState({ uid: Number(text) })}
-            placeholder={Strings.userID}
-          />
           <PlainTextInput
             keyboardType={'email-address'}
             label={Strings.email}
@@ -75,5 +77,18 @@ class SignInScreen extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  keyboardView: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+});
 
 export default SignInScreen;

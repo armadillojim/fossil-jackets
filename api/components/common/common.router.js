@@ -16,7 +16,14 @@ module.exports = function CommonRouter(commonController, logger) {
 
     // Check for a valid HMAC signature on all requests, then forward on
     router.use((req, res, next) => {
-        commonController.verifySignature(req.path, req.query, req.body)
+        let verifier;
+        if (req.path === '/token/verify') {
+            verifier = commonController.verifyEmail;
+        }
+        else {
+            verifier = commonController.verifySignature;
+        }
+        verifier(req.path, req.query, req.body)
             .then(() => { next(); })  // everything's OK: move on to the next handler
             .catch(next);             // pass any exception to the error handler
     });

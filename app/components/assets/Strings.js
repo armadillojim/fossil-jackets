@@ -55,7 +55,6 @@ Strings = {
     signIn: 'Sign In',
     tokenVerifyErrorTitle: 'Verification Error',
     tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your password.',
-    userID: 'User ID',
     // SignOutScreen
     signingOut: 'Signing out ...',
     // TextInputs
@@ -133,7 +132,6 @@ Strings = {
     signIn: 'Inicia Sesión',
     tokenVerifyErrorTitle: 'Error de Verificación',
     tokenVerifyErrorMessage: 'Se ha producido un error al iniciar sesión.  Por favor, verifique su conexión de red y su contraseña.',
-    userID: 'ID de Usuario',
     // SignOutScreen
     signingOut: 'Cerrando sesión ...',
     // TextInputs

@@ -5,6 +5,8 @@ import { PlainTextInput } from './TextInputs.js';
 import Strings from './assets/Strings.js';
 import { tokenFromPassword, generateSignature } from './lib/TokenService.js';
 
+import './Login.css';
+
 class Login extends Component {
   static navigationOptions = {
     title: Strings.pleaseSignIn,
@@ -13,45 +15,52 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      uid: null,
       email: null,
       password: null,
+      waiting: false,
     };
   }
 
   // NB: URL and URLSearchParams are not yet supported.  We would otherwise do:
   //   const url = new URL(`https://${config.domain}/api${path}`);
-  //   url.search = new URLSearchParams({ uid: uid, time: now, hmac: hmac });
-  // Also, uid is from Number() applied to user-generated content so should be safe.
+  //   url.search = new URLSearchParams({ email: email, time: now, hmac: hmac });
   signIn = () => {
-    const { uid, email, password } = this.state;
+    const email = this.state.email.toLowerCase();
+    const password = this.state.password;
     const token = tokenFromPassword(email, password);
     const now = Date.now();
     const path = '/token/verify';
-    const hmac = generateSignature({ uid: uid, time: now, path: path }, token);
+    const hmac = generateSignature({ email: email, path: path, time: now }, token);
     const urlBase = `https://${config.domain}/api${path}`;
-    const urlQuery = `uid=${uid}&time=${now}&hmac=${encodeURIComponent(hmac)}`;
+    const urlQuery = `email=${encodeURIComponent(email)}&time=${now}&hmac=${encodeURIComponent(hmac)}`;
+    this.setState({ waiting: true });
     fetch(`${urlBase}?${urlQuery}`).then((res) => {
+      this.setState({ waiting: false });
       if (!res.ok) { throw { code: res.status, message: res.statusText }; }
-      return res;
+      return res.json();
     }).then((res) => {
-      sessionStorage.setItem('user:credentials', JSON.stringify({ uid: uid, token: token }));
+      sessionStorage.setItem('user:credentials', JSON.stringify({ uid: res.uid, token: token }));
       this.props.history.replace('/jacket');
     }).catch((err) => {
       alert(Strings.tokenVerifyErrorMessage);
+      this.setState({ waiting: false });
     });
   };
 
   render() {
-    return (
+    const getFillStyle = (delay) => ({ animationDelay: `-${delay}s` });
+    return this.state.waiting ? (
+      <div className="waiting">
+        <div style={{ animationDuration: '0.8s' }} className="dots">
+          <div className="circle" style={getFillStyle(0.3)} />
+          <div className="circle" style={getFillStyle(0.2)} />
+          <div className="circle" style={getFillStyle(0.1)} />
+        </div>
+        <div className="signingIn">{Strings.signingIn}</div>
+      </div>
+    ) : (
       <div>
         <div><h3>{Strings.pleaseSignIn}</h3></div>
-        <PlainTextInput
-          keyboardType={'numeric'}
-          label={Strings.userID}
-          onChangeText={(text) => this.setState({ uid: Number(text) })}
-          placeholder={Strings.userID}
-        />
         <PlainTextInput
           keyboardType={'email'}
           label={Strings.email}

@@ -8,6 +8,7 @@ const Strings = {
     password: 'Password',
     pleaseSignIn: 'Please sign in',
     signIn: 'Sign In',
+    signingIn: 'Signing in ...',
     tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your password.',
     userID: 'User ID',
     // Table
@@ -38,6 +39,7 @@ const Strings = {
     password: 'Contraseña',
     pleaseSignIn: 'Por favor, regístrese',
     signIn: 'Inicia Sesión',
+    signingIn: 'Iniciando sesión ...',
     tokenVerifyErrorMessage: 'Se produjo un error al iniciar sesión.  Por favor, verifique su conexión de red y su contraseña.',
     userID: 'ID de Usuario',
     // Table
