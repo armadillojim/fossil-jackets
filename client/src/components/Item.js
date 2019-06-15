@@ -73,7 +73,7 @@ class Item extends Component {
 
   renderElevation(elevation) {
     if (!(elevation || elevation === 0)) { return ''; }
-    return `${elevation}m`;
+    return `${elevation.toFixed(2)}m`;
   }
 
   photoTableCell(jid, pid) {

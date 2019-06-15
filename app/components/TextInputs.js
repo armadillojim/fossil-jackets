@@ -156,7 +156,7 @@ class GeolocationTextInput extends Component {
   renderElevation(location) {
     const { elevation } = location;
     if (!(elevation || elevation === 0)) { return ''; }
-    return `${elevation}m`;
+    return `${elevation.toFixed(2)}m`;
   }
 
   render() {
