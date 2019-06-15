@@ -6,7 +6,7 @@ module.exports = function CommonRouter(commonController, logger) {
     const router = express.Router();
 
     // Parse HTTP request bodies as JSON
-    router.use(bodyParser.json({ limit: '10mb', strict: false }));
+    router.use(bodyParser.json({ limit: '20mb', strict: false }));
 
     // Log all requests, and forward them to the next middleware function
     router.use((req, res, next) => {

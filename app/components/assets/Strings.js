@@ -69,11 +69,10 @@ Strings = {
     OK: 'OK',
     unknownError: 'Some uploads failed.  Try again later.',
     uploadError: 'Upload Error',
-    uploadProgress: (n, N, isJacket) => {
-      const noun = isJacket ? 'jacket' : 'photo';
+    uploadProgress: (n, N) => {
       return (N === 1) ?
-        `${n} of ${N} ${noun} uploaded` :
-        `${n} of ${N} ${noun}s uploaded`;
+        `${n} of ${N} jacket uploaded` :
+        `${n} of ${N} jackets uploaded`;
     },
     // ViewScreen
     fetchError: 'Fetch Error',
@@ -146,11 +145,10 @@ Strings = {
     OK: 'De acuerdo',
     unknownError: 'Algunas subidas fallaron.  Inténtalo más tarde.',
     uploadError: 'Error al Subir',
-    uploadProgress: (n, N, isJacket) => {
-      const noun = isJacket ? 'sobrecubierta' : 'foto';
+    uploadProgress: (n, N) => {
       return (N === 1) ?
-        `${n} de ${N} ${noun} subida` :
-        `${n} de ${N} ${noun}s subidas`;
+        `${n} de ${N} sobrecubierta subida` :
+        `${n} de ${N} sobrecubiertas subidas`;
     },
     // ViewScreen
     fetchError: 'Error de Descarga',

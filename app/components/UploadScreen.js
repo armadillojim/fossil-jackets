@@ -12,9 +12,7 @@ class UploadScreen extends Component {
     super(props);
     this.state = {
       nJackets: null,
-      nPhotos: null,
       nUploaded: 0,
-      isJacket: true,
     };
     this.fetchCredentials();
   }
@@ -28,10 +26,8 @@ class UploadScreen extends Component {
   fetchKeys = async () => {
     const keys = await AsyncStorage.getAllKeys();
     const jacketKeys = keys.filter((key) => key.startsWith('jacket:'));
-    const photoKeys = keys.filter((key) => key.startsWith('photo:'));
-    photoKeys.sort(); // ensure primary photos come first
-    this.setState({ nJackets: jacketKeys.length, nPhotos: photoKeys.length });
-    const success = await this.uploadJackets(jacketKeys) && await this.uploadPhotos(photoKeys);
+    this.setState({ nJackets: jacketKeys.length });
+    const success = await this.uploadJackets(jacketKeys);
     if (success) { Alert.alert(
       Strings.success,
       '✅',
@@ -41,17 +37,17 @@ class UploadScreen extends Component {
   }
 
   uploadJackets = async (keys) => {
-    this.jids = {};
     let failure = 0;
     for (const key of keys) {
       const jacketString = await AsyncStorage.getItem(key);
-      const jid = await this.uploadItem(JSON.parse(jacketString), '/jacket');
+      const jacket = JSON.parse(jacketString);
+      if (jacket.photos) { jacket.photos = await Promise.all(jacket.photos.map((photo) => getDataUriFromFileUri(photo.uri))); }
+      const jid = await this.uploadItem(jacket, '/jacket');
       if (jid === null) {
         failure += 1;
       }
       else {
         this.setState((prevState) => ({ nUploaded: prevState.nUploaded + 1 }));
-        this.jids[key] = jid;
         await AsyncStorage.removeItem(key);
       }
     }
@@ -70,51 +66,6 @@ class UploadScreen extends Component {
         Strings.uploadError,
         failure === keys.length ? Strings.networkError : Strings.unknownError,
         [{ text: Strings.OK, onPress: () => { navigate('Home'); } }],
-        { cancelable: false },
-      );
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
-
-  uploadPhotos = async (keys) => {
-    // if there are no photos, we're done
-    if (!keys.length) {
-      return true;
-    }
-    // reset component state
-    this.setState({ nUploaded: 0, isJacket: false });
-    // start our uploads
-    let failure = 0;
-    const { uid, token } = this.credentials;
-    for (const key of keys) {
-      const photoString = await AsyncStorage.getItem(key);
-      const photo = JSON.parse(photoString);
-      // modify the photo's associated jacket ID to the database's value
-      const jid = this.jids[photo.jid];
-      photo.jid = jid;
-      // fetch the image contents and encode them
-      photo.image = await getDataUriFromFileUri(photo.image);
-      // generate a signature, and paint the photo data with it
-      const hmac = generateSignature(photo, token);
-      photo.phmac = hmac;
-      // and upload it
-      const pid = await this.uploadItem(photo, `/jacket/${jid}/photo`);
-      if (pid === null) {
-        failure += 1;
-      }
-      else {
-        this.setState((prevState) => ({ nUploaded: prevState.nUploaded + 1 }));
-        await AsyncStorage.removeItem(key);
-      }
-    }
-    if (failure) {
-      Alert.alert(
-        Strings.uploadError,
-        failure === keys.length ? Strings.networkError : Strings.unknownError,
-        [{ text: Strings.OK, onPress: () => { this.props.navigation.navigate('Home'); } }],
         { cancelable: false },
       );
       return false;
@@ -148,7 +99,7 @@ class UploadScreen extends Component {
   }
 
   render() {
-    const { nJackets, nPhotos, nUploaded, isJacket } = this.state;
+    const { nJackets, nUploaded } = this.state;
     if (nJackets === null) {
       return (
         <View style={styles.container}>
@@ -165,11 +116,10 @@ class UploadScreen extends Component {
       );
     }
     else {
-      const nToUpload = isJacket ? nJackets : nPhotos;
       return (
         <ProgressBar
-          label={Strings.uploadProgress(nUploaded, nToUpload, isJacket)}
-          progress={nUploaded / nToUpload}
+          label={Strings.uploadProgress(nUploaded, nJackets)}
+          progress={nUploaded / nJackets}
         />
       );
     }

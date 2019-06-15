@@ -1,7 +1,7 @@
 module.exports = function(db) {
 
     const CommonService = require('../common/common.service.js');
-    const { verifySignature } = new CommonService(db);
+    const { generateSignature, verifySignature } = new CommonService(db);
 
     const checkHashCollision = async (table, hashField, hash) => {
         const countQuery = `select count(*) from ${table} where ${hashField}=$1`;
@@ -70,6 +70,9 @@ module.exports = function(db) {
 
     const jacketInsertQuery = `insert into jackets (${jacketFieldsString}) values (${jacketValuesString}) returning jid`;
     const putJacket = async (jacket) => {
+        // segregate photos
+        const photos = jacket.photos || [];
+        delete jacket.photos;
         // validate the signature
         const jhmac = jacket.jhmac;
         delete jacket.jhmac;
@@ -81,9 +84,36 @@ module.exports = function(db) {
         // write the jacket
         const jacketInsertValues = objectValues(jacket, jacketFields);
         jacketInsertValues[jacketFields.length - 1] = jhmac;
-        const jacketInsertResult = await db.query(jacketInsertQuery, jacketInsertValues);
-        const jid = jacketInsertResult.rows[0].jid;
-        return jid;
+        const client = await db.connect();
+        try {
+            await client.query('BEGIN');
+            const jacketInsertResult = await client.query(jacketInsertQuery, jacketInsertValues);
+            const jid = jacketInsertResult.rows[0].jid;
+            // write photos (if any)
+            let failures = 0;
+            photos.forEach(async (photo) => {
+                photo = {
+                    puid: jacket.juid,
+                    jid: jid,
+                    image: photo,
+                };
+                photo.phmac = await generateSignature(photo, jacket.juid);
+                const pid = await putPhoto(photo);
+                if (pid === false) { failures += 1; }
+            });
+            if (failures) { throw { message: `${failures} photos failed to save` }; }
+            // success
+            await client.query('COMMIT');
+            return jid;
+        }
+        catch (err) {
+            await client.query('ROLLBACK');
+            console.error(`jacket insertion failed: ${err}`);
+            return false;
+        }
+        finally {
+            client.release();
+        }
     };
 
     const photoFields = [

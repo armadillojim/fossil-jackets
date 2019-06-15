@@ -21,6 +21,7 @@ const jacketSchema = {
         notes: { type: 'string', minLength: 1, maxLength: 1024 },
         tid: { type: 'string', pattern: '[0-9A-F]{14}' },
         jhmac: { type: 'string', format: 'base64', minLength: 44, maxLength: 44 },
+        photos: { type: 'array', minItems: 1, maxItems: 10, items: { type: 'string' } },
     },
     required: [ 'version', 'juid', 'expedition', 'jacketNumber', 'created', 'jhmac' ],
     additionalProperties: false

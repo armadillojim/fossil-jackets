@@ -42,17 +42,6 @@ class NewScreen extends Component {
     this.setState({ juid: uid, token: token });
   };
 
-  savePhoto = async (photoUri, label, uid, jid) => {
-    // create an object with data necessary for upload
-    const photo = {
-      puid: uid,
-      jid: jid,
-      image: photoUri,
-    };
-    // store the data
-    await AsyncStorage.setItem(`photo:${label}:${Date.now()}`, JSON.stringify(photo));
-  };
-
   saveJacket = async () => {
     // copy state to a new object we can mutate
     const jacket = {...this.state};
@@ -83,13 +72,11 @@ class NewScreen extends Component {
     // generate a signature, and paint the jacket data with it
     const hmac = generateSignature(jacket, token);
     jacket.jhmac = hmac;
+    // add the photos back for later retrieval
+    if (primaryPhoto) { jacket.photos = [primaryPhoto].concat(secondaryPhotos); }
     // store the data, and navigate back to the home screen
     const jid = `jacket:${jacket.created}`;
     await AsyncStorage.setItem(jid, JSON.stringify(jacket));
-    if (primaryPhoto) { await this.savePhoto(primaryPhoto.uri, 'primary', jacket.juid, jid); }
-    for (const secondaryPhoto of secondaryPhotos) {
-      await this.savePhoto(secondaryPhoto.uri, 'secondary', jacket.juid, jid);
-    }
     Alert.alert(
       Strings.success,
       '✅',
