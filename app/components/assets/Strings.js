@@ -1,12 +1,6 @@
 import { Localization } from 'expo';
 import { Platform } from 'react-native';
 
-// on iOS, build locale string from locale==language and country
-// Android or other platform: use built-in locale already in language-country format
-const locale = (Platform.OS === 'ios') ?
-  Localization.locale + '-' + Localization.country :
-  Localization.locale;
-
 Strings = {
   'en-US': {
     // AuthLoadingScreen
@@ -163,6 +157,27 @@ Strings = {
     fetchErrorMessage: 'Algo salió mal al descargar los datos de la sobrecubierta del servidor',
   },
 };
+
+// On iOS, the locale can be either a two-letter language code, or it can be a
+// regionalized language (language, hyphen, country).  Some languages offer a
+// pure language only, some a regionalized version only, and some offer both a
+// pure language alongside regionalized versions.  On the other hand, it appears
+// Android forces a user to always regionalize their language choice.  As a
+// failsafe, we run both OSs through the same checks.
+const DEFAULT_LOCALE = 'en-US';
+const pickLocale = (locale, country) => {
+  if (!locale) { return DEFAULT_LOCALE; }
+  if (locale in Strings) { return locale; }
+  if (locale.length==2 && country) {
+    const regionalization = `${locale}-${country}`;
+    if (regionalization in Strings) { return regionalization; }
+  }
+  locale = locale.split('-')[0]; // NB: works for XX or XX-YY
+  const languageMatch = Object.keys(Strings).find((code) => code.startsWith(locale));
+  if (languageMatch) { return languageMatch; }
+  return DEFAULT_LOCALE;
+};
+const locale = pickLocale(Localization.locale, Localization.country);
 
 const localeStrings = Strings[locale];
 import config from '../../config.json';
