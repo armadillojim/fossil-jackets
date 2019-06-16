@@ -1,9 +1,13 @@
 {
   "expo": {
+    "android": {
+      "package": "host.exp.exponent.fossiljackets",
+      "versionCode": 2
+    },
     "githubUrl": "https://github.com/armadillojim/fossil-jackets",
     "icon": "app-icon.png",
     "ios": {
-      "bundleIdentifier": "host.exp.exponent.fossil-jackets",
+      "bundleIdentifier": "host.exp.exponent.fossiljackets",
       "supportsTablet": true
     },
     "name": "Fossil Jackets",
