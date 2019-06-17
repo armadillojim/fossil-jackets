@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { Alert, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 import Autocomplete from 'react-native-autocomplete-input';
+import NfcManager, { Ndef } from 'react-native-nfc-manager';
 
 import Strings from './assets/Strings';
+
+const iconHitSlop = { top: 8, left: 8, bottom: 8, right: 8 };
 
 // When using an AutoCompleteTextInput inside a ScrollView,
 // set the ScrollView's keyboardShouldPersistTaps='always'.
@@ -162,7 +165,6 @@ class GeolocationTextInput extends Component {
   render() {
     const { editable } = this.props;
     const { location, getting } = this.state;
-    const compassHitSlop = { top: 8, left: 8, bottom: 8, right: 8 };
     return editable ? (
       <View>
         <View style={styles.container}>
@@ -173,7 +175,7 @@ class GeolocationTextInput extends Component {
             style={styles.input}
             underlineColorAndroid={'transparent'}
           />
-          <TouchableOpacity hitSlop={compassHitSlop} onPress={this.getLocation} style={styles.compassTouchable}>
+          <TouchableOpacity hitSlop={iconHitSlop} onPress={this.getLocation} style={styles.iconTouchable}>
             <Icon
               name={ getting ? 'satellite-variant' : 'compass' }
               size={ (Platform.OS === 'ios') ? 20 : 28 }
@@ -247,7 +249,94 @@ class PlainTextInput extends Component {
 class TagTextInput extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      canRead: false,
+      isReading: false,
+      tagId: null,
+    };
+    this.getTag = this.getTag.bind(this);
+    this.onTag = this.onTag.bind(this);
+    this.onTagId = this.onTagId.bind(this);
     this.validateTag = this.validateTag.bind(this);
+  }
+
+  componentDidMount() {
+    NfcManager.start({
+      onSessionClosedIOS: () => {
+        Alert.alert(
+          Strings.closedSessionTitle,
+          Strings.closedSession,
+          [{ text: Strings.OK, onPress: () => { this.setState({ canRead: false }); } }],
+          { cancelable: false },
+        );
+      }
+    })
+    .then(() => {
+      if (Platform.OS === 'android') {
+        // On Android, it is possible for NFC to be off, but start() succeeds
+        NfcManager.isEnabled()
+        .then((enabled) => { this.setState({ canRead: enabled }); })
+        .catch(() => { this.setState({ canRead: false }); });
+      }
+      else {
+        // On iOS, NFC is always enabled (if present)
+        this.setState({ canRead: true });
+      }
+    })
+    .catch((error) => {
+      // either no NFC capability, device's NFC is off, or permission was denied
+      this.setState({ canRead: false });
+    });
+  }
+
+  componentWillUnmount() {
+    NfcManager.unregisterTagEvent().then(() => {}).catch(() => {});
+    NfcManager.stop().then(() => {}).catch(() => {});
+  }
+
+  getTag() {
+    if (this.state.isReading) { return; }
+    NfcManager.registerTagEvent(this.onTag).then(() => {
+      this.setState({ isReading: true });
+    }).catch((error) => {
+      Alert.alert(
+        Strings.tagReadingError,
+        JSON.stringify(error),
+        [{ text: Strings.OK, onPress: () => { this.setState({ isReading: false }); } }],
+        { cancelable: false },
+      );
+    });
+  }
+
+  onTag(tag) {
+    NfcManager.unregisterTagEvent().then(() => {}).catch(() => {});
+    let tagId = (tag.id && tag.id.length >= 4) ? tag.id : null;
+    if (!tagId) {
+      try {
+        if (!tag.ndefMessage || !tag.ndefMessage.length) {
+          throw { message: 'No NDEF records on tag' };
+        }
+        if (!Ndef.isType(tag.ndefMessage[0], Ndef.TNF_WELL_KNOWN, Ndef.RTD_TEXT)) {
+          throw { message: 'Unknown NDEF record on tag' };
+        }
+        tagId = Ndef.text.decodePayload(tag.ndefMessage[0].payload);
+      }
+      catch (error) {
+        tagId = null;
+        Alert.alert(
+          Strings.tagReadingError,
+          JSON.stringify(error),
+          [{ text: Strings.OK, onPress: () => { this.setState({ isReading: false }); } }],
+          { cancelable: false },
+        );
+      }
+    }
+    this.onTagId(tagId);
+  }
+
+  onTagId(tagId) {
+    this.setState({ isReading: false, tagId: tagId });
+    this.props.onChangeText(tagId);
   }
 
   static normalizeTag(s) {
@@ -255,8 +344,9 @@ class TagTextInput extends Component {
   }
 
   validateTag(e) {
+    const hasInput = e.nativeEvent.text.length > 0;
     s = TagTextInput.normalizeTag(e.nativeEvent.text);
-    const isValidTag = (s.length === 0 || s.length === 14);
+    const isValidTag = ((!hasInput && s.length === 0) || s.length === 14);
     if (!isValidTag) {
       Alert.alert(Strings.badTagFormat, Strings.badTagFormatMessage);
     }
@@ -264,7 +354,24 @@ class TagTextInput extends Component {
 
   render() {
     const { onChangeText } = this.props;
-    return (
+    const { canRead, isReading, tagId } = this.state;
+    return canRead ? (
+      <View style={styles.container}>
+        <Text style={styles.label}>{Strings.tid}</Text>
+        <TextInput
+          defaultValue={tagId}
+          editable={false}
+          style={styles.input}
+          underlineColorAndroid={'transparent'}
+        />
+        <TouchableOpacity hitSlop={iconHitSlop} onPress={this.getTag} style={styles.iconTouchable}>
+          <Icon
+            name={ isReading ? 'nfc' : 'nfc-variant' }
+            size={ (Platform.OS === 'ios') ? 20 : 28 }
+          />
+        </TouchableOpacity>
+      </View>
+    ) : (
       <View style={styles.container}>
         <Text style={styles.label}>{Strings.tid}</Text>
         <TextInput
@@ -317,7 +424,7 @@ const styles = StyleSheet.create({
   suggestion: {
     fontSize: 16,
   },
-  compassTouchable: {
+  iconTouchable: {
     position: 'absolute',
     right: 5,
     top: 11,

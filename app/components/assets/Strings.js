@@ -54,12 +54,15 @@ Strings = {
     // TextInputs
     badTagFormat: 'Bad Tag Format',
     badTagFormatMessage: 'The tag ID contents do not appear to be a serial number.  For example, HH:HH:HH:HH:HH:HH:HH where “H” is a hexadecimal digit.',
+    closedSessionTitle: 'iOS NFC session ended',
+    closedSession: 'iOS ended the NFC reading session unexpectedly.',
     east: 'E',
     elevation: 'Elevation',
     geolocationError: 'Geolocation Error',
     geolocationMessage: 'Something went wrong when attempting to fetch your location',
     north: 'N',
     south: 'S',
+    tagReadingError: 'Tag Reading Error',
     west: 'W',
     // UploadScreen
     fetchingJackets: 'Fetching jackets from storage ...',
@@ -130,12 +133,15 @@ Strings = {
     // TextInputs
     badTagFormat: 'Formato Incorrecto de Etiqueta',
     badTagFormatMessage: 'El contenido de la etiqueta ID no parecía ser un número de serie.  Por ejemplo, HH:HH:HH:HH:HH:HH:HH donde “H” es un dígito hexadecimal.',
+    closedSessionTitle: 'Sesión de iOS NFC finalizada',
+    closedSession: 'iOS terminó la sesión de medición NFC inesperadamente.',
     east: 'E',
     elevation: 'Elevación',
     geolocationError: 'Error de Geolocalización',
     geolocationMessage: 'Algo salió mal al obtener su geolocalización',
     north: 'N',
     south: 'S',
+    tagReadingError: 'Error de Medición de Etiqueta',
     west: 'O',
     // UploadScreen
     fetchingJackets: 'Buscando sobrecubiertas del depósito ...',
