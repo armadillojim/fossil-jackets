@@ -2,18 +2,30 @@
   "expo": {
     "android": {
       "package": "host.exp.exponent.fossiljackets",
-      "versionCode": 2
+      "versionCode": 2,
+      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
+      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
     },
     "githubUrl": "https://github.com/armadillojim/fossil-jackets",
     "icon": "app-icon.png",
     "ios": {
+      "buildNumber": "2.0.0",
       "bundleIdentifier": "host.exp.exponent.fossiljackets",
       "supportsTablet": true
     },
     "name": "Fossil Jackets",
+    "platforms": [
+      "android",
+      "ios"
+    ],
     "privacy": "unlisted",
     "sdkVersion": "32.0.0",
     "slug": "fossil-jackets",
-    "version": "2.0.0"
+    "version": "2.0.0",
+    "isDetached": true,
+    "detach": {
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.10.8-sdk32.0.0-bca0f957-de78-44c8-91ed-f3151372d79d.tar.gz"
+    },
+    "scheme": "exp954d1d047f4d4aff8933277c1489ac7f"
   }
 }

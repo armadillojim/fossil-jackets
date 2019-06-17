@@ -1,0 +1,5 @@
+.gradle
+.idea
+local.properties
+app/build
+app/src/main/java/host/exp/exponent/generated

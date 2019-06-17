@@ -1,0 +1,4 @@
+# ignore installed modules
+Pods
+xcuserdata
+Supporting
