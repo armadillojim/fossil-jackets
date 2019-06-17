@@ -23,6 +23,7 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-autocomplete-input": "^3.6.0",
+    "react-native-nfc-manager": "^1.2.2",
     "react-navigation": "^3.9.0"
   }
 }

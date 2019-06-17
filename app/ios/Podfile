@@ -112,6 +112,8 @@ target 'fossil-jackets' do
   pod 'glog',
     :podspec => "../node_modules/react-native/third-party-podspecs/glog.podspec",
     :inhibit_warnings => true
+  pod 'react-native-nfc-manager',
+    :path => '../node_modules/react-native-nfc-manager/'
 
 
   post_install do |installer|
