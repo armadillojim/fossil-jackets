@@ -1,5 +1,6 @@
 .gradle
 .idea
 local.properties
+app/fabric.properties
 app/build
 app/src/main/java/host/exp/exponent/generated
