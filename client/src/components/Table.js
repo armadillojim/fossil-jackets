@@ -108,6 +108,12 @@ class Table extends Component {
     this.fetchJackets();
   }
 
+  sortBy = (key) => {
+    this.setState((state) => ({
+      rows: this.state.rows.sort((a, b) => (a[key] > b[key]) ? 1: -1)
+    }));
+  };
+
   render() {
     const rows = this.state.rows.map((row) => (
       <TableRow key={row.jid} history={this.props.history} {...row} />
@@ -118,14 +124,14 @@ class Table extends Component {
         <table className="table">
           <thead>
             <tr>
-              <th>{Strings.creator}</th>
-              <th>{Strings.expedition}</th>
-              <th>{Strings.jacketId}</th>
-              <th>{Strings.created}</th>
-              <th>{Strings.formation}</th>
-              <th>{Strings.locality}</th>
-              <th>{Strings.latLng}</th>
-              <th>{Strings.specimenType}</th>
+              <th onClick={() => this.sortBy('creator')}>{Strings.creator}</th>
+              <th onClick={() => this.sortBy('expedition')}>{Strings.expedition}</th>
+              <th onClick={() => this.sortBy('jacketnumber')}>{Strings.jacketId}</th>
+              <th onClick={() => this.sortBy('created')}>{Strings.created}</th>
+              <th onClick={() => this.sortBy('formation')}>{Strings.formation}</th>
+              <th onClick={() => this.sortBy('locality')}>{Strings.locality}</th>
+              <th onClick={() => this.sortBy('lat')}>{Strings.latLng}</th>
+              <th onClick={() => this.sortBy('specimentype')}>{Strings.specimenType}</th>
             </tr>
           </thead>
           <tbody>
