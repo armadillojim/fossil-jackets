@@ -100,6 +100,7 @@ class Table extends Component {
     try {
       const jackets = await this.fetchItem('/jacket');
       const expeditions = jackets.map((jacket) => jacket.expedition).filter((value, index, self) => (self.indexOf(value) === index));
+      expeditions.sort();
       this.setState({ rows: jackets, allRows: jackets, expeditions: expeditions });
     }
     catch (err) {
