@@ -66,8 +66,11 @@ class Table extends Component {
     super(props);
     this.state = {
       rows: [],
+      allRows: [],
+      expeditions: [],
     };
     this.credentials = JSON.parse(sessionStorage.getItem('user:credentials'));
+    this.filterByExpedition = this.filterByExpedition.bind(this);
   }
 
   itemUrl = (path) => {
@@ -96,7 +99,8 @@ class Table extends Component {
   fetchJackets = async () => {
     try {
       const jackets = await this.fetchItem('/jacket');
-      this.setState({ rows: jackets });
+      const expeditions = jackets.map((jacket) => jacket.expedition).filter((value, index, self) => (self.indexOf(value) === index));
+      this.setState({ rows: jackets, allRows: jackets, expeditions: expeditions });
     }
     catch (err) {
       this.setState({ rows: [] });
@@ -108,6 +112,12 @@ class Table extends Component {
     this.fetchJackets();
   }
 
+  filterByExpedition = (e) => {
+    const expedition = e.target.value;
+    if (expedition === '--all--') { this.setState({ rows: this.state.allRows }); }
+    else { this.setState({ rows: this.state.allRows.filter((jacket) => (jacket.expedition===expedition)) }); }
+  };
+
   sortBy = (key) => {
     this.setState((state) => ({
       rows: this.state.rows.sort((a, b) => (a[key] > b[key]) ? 1: -1)
@@ -118,9 +128,19 @@ class Table extends Component {
     const rows = this.state.rows.map((row) => (
       <TableRow key={row.jid} history={this.props.history} {...row} />
     ));
+    const filterOptions = this.state.expeditions.map((expedition) => (
+      <option key={expedition} value={expedition}>{expedition}</option>
+    ));
     return (
       <div className="table-responsive">
         <div><h3>{Strings.tableTitle}</h3></div>
+        <div className="form-group col-md-4">
+          <label htmlFor="filter-select">{Strings.filterByExpedition}</label>
+          <select className="form-control" id="filter-select" onChange={this.filterByExpedition}>
+            <option value="--all--">{Strings.allJackets}</option>
+            {filterOptions}
+          </select>
+        </div>
         <table className="table">
           <thead>
             <tr>

@@ -12,6 +12,8 @@ const Strings = {
     tokenVerifyErrorMessage: 'An error occurred when signing in.  Please check your network connection and your password.',
     userID: 'User ID',
     // Table
+    allJackets: '-- All --',
+    filterByExpedition: 'Filter by Expedition',
     tableTitle: 'Jackets',
     // Item
     itemTitle: 'Jacket',
@@ -43,6 +45,8 @@ const Strings = {
     tokenVerifyErrorMessage: 'Se produjo un error al iniciar sesión.  Por favor, verifique su conexión de red y su contraseña.',
     userID: 'ID de Usuario',
     // Table
+    allJackets: '-- Todo --',
+    filterByExpedition: 'Filtrar por Expedición',
     tableTitle: 'Sobrecubiertas',
     // Item
     itemTitle: 'Sobrecubierta',
